@@ -2,11 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="jquery.js"></script>
+    <script src="websocket.js"></script>
     <script>
-window.$ = window.jQuery = require('./jquery.js');
-
 $(function() {
   var wsUri = "ws://cabin.nyampass.com/ws";
   var $peerId = $('#peer-id');
@@ -88,7 +86,6 @@ $(function() {
 </script>
     <title>cabin</title>
     <body>
-  asdf
       <div class="container">
         <div class="menu-area">
           <div class="user-menu">ID: <span id="peer-id"></span></div>
