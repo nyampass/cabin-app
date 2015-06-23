@@ -12,6 +12,10 @@ import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -70,12 +74,9 @@ public class Controller implements Initializable {
 
         webEngine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
 
-        promotedCheckbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                webEngine.executeScript("window.onPromotedChanged(" + Boolean.toString(newValue) + ", '" +
-                        passwordField.getText() + "');");
-            }
+        promotedCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            webEngine.executeScript("window.onPromotedChanged(" + Boolean.toString(newValue) + ", '" +
+                    passwordField.getText() + "');");
         });
 
     }
@@ -85,8 +86,11 @@ public class Controller implements Initializable {
         this.web.getEngine().executeScript(textArea.getText());
     }
 
+    private static final DateFormat DATE_FORMATER = new SimpleDateFormat("HH:mm:ss");
+
     public void appendLog(String text) {
-        consoleArea.appendText(text + "\n");
+        String date = DATE_FORMATER.format(new Date());
+        consoleArea.appendText("["+ date + "] " + text + "\n");
     }
 
     public void setPeerId(String peerId) {
