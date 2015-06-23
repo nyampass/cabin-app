@@ -43,8 +43,6 @@ public class Controller implements Initializable {
                     }
                 });
 
-        //  startButton.setGraphic(new ImageView("flag.png"));
-
         JSObject window = (JSObject) webEngine.executeScript("window");
         window.setMember("app", new JSBridge());
         webEngine.executeScript("console.log = function(message)\n" +
