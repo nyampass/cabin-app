@@ -48,7 +48,7 @@
         <WebView fx:id="web" prefHeight="200.0" prefWidth="200.0" />
       </items>
     </SplitPane>
-    <TextField prefHeight="150.0" prefWidth="800.0" />
+    <TextArea fx:id="consoleArea" prefHeight="150.0" prefWidth="800.0" />
   </children>
   <effect>
     <InnerShadow />

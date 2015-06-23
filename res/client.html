@@ -61,7 +61,7 @@ $(function() {
   function appendMessage(message) {
     var datetime = moment().format('YYYY/MM/DD HH:mm:ss');
     var text = $logtext.val();
-    $logtext.val(text + '[' + datetime + '] ' + message + '\n')
+    app.log(text + ' ' + message + '\n')
             .scrollTop($logtext[0].scrollHeight - $logtext.height());
   }
 

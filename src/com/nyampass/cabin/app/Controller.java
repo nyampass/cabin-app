@@ -20,8 +20,18 @@ public class Controller implements Initializable {
     WebView web;
     @FXML
     TextArea textArea;
+    @FXML
+    TextArea consoleArea;
+
+    private static Controller instance;
+
+    public static Controller instance() {
+        return instance;
+    }
 
     public void initialize(URL location, ResourceBundle resources) {
+        instance = this;
+
         final WebEngine webEngine = web.getEngine();
 
         final URL html = getClass().getResource("/client.html");
@@ -56,5 +66,9 @@ public class Controller implements Initializable {
     @FXML
     protected void onStart(ActionEvent event) {
         this.web.getEngine().executeScript(textArea.getText());
+    }
+
+    public void appendLog(String text) {
+        consoleArea.appendText(text + "\n");
     }
 }
