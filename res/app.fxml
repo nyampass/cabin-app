@@ -29,6 +29,7 @@
             <Insets />
           </HBox.margin>
         </Button>
+        <Label id="" fx:id="peerIdLabel" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Peer Id: xxxx" />
       </children>
       <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

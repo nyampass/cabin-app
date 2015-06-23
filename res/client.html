@@ -7,11 +7,7 @@
     <script>
 $(function() {
   var wsUri = "ws://cabin.nyampass.com/ws";
-  var $peerId = $('#peer-id');
   var $promoted = $('#promoted');
-  var $code = $('#code');
-  var $exec = $('#exec');
-  var $logtext = $('#log-text');
 
   var websocket;
   var peerId;
@@ -41,7 +37,7 @@ $(function() {
     message = JSON.parse(rawMessage);
     if (message.type == 'connected') {
       peerId = message["peer-id"];
-      $peerId.html(peerId);
+      app.setPeerId(peerId);
     } else if (message.type == 'promote' && message.status == 'ok') {
       $promoted.prop('checked', true);
     } else if (message.type == 'demote' && message.status == 'ok') {
@@ -59,10 +55,7 @@ $(function() {
   }
 
   function appendMessage(message) {
-    var datetime = moment().format('YYYY/MM/DD HH:mm:ss');
-    var text = $logtext.val();
-    app.log(text + ' ' + message + '\n')
-            .scrollTop($logtext[0].scrollHeight - $logtext.height());
+    app.log(message + '\n')
   }
 
   startWebsocket();
@@ -77,37 +70,18 @@ $(function() {
       doSend(JSON.stringify(request));
     }
   });
-
-  $exec.click(function() {
-    var code = $code.val();
-    eval(code);
-  });
 })
 </script>
     <title>cabin</title>
     <body>
       <div class="container">
         <div class="menu-area">
-          <div class="user-menu">ID: <span id="peer-id"></span></div>
           <div class="promotion-menu">
             <span>Password: </span>
-            <input id="password" type="text"></input>
-            <input id="promoted" type="checkbox"></input>
+            <input id="password" type="text"/>
+            <input id="promoted" type="checkbox"/>
             <span>待受可能</span>
           </div>
-        </div>
-        <div class="content">
-          <div class="editor">
-            <textarea id="code"></textarea>
-          </div>
-          <div class="button-area">
-            <div class="padd">
-              <button id="exec" class="button">実行</button>
-            </div>
-          </div>
-        </div>
-        <div class="log-area">
-          <textarea id="log-text"></textarea>
         </div>
       </div>
     </body>

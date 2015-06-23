@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -22,8 +23,11 @@ public class Controller implements Initializable {
     TextArea textArea;
     @FXML
     TextArea consoleArea;
+    @FXML
+    Label peerIdLabel;
 
     private static Controller instance;
+    private String peerId;
 
     public static Controller instance() {
         return instance;
@@ -70,5 +74,9 @@ public class Controller implements Initializable {
 
     public void appendLog(String text) {
         consoleArea.appendText(text + "\n");
+    }
+
+    public void setPeerId(String peerId) {
+        peerIdLabel.setText("Peer Id: " + peerId);
     }
 }
