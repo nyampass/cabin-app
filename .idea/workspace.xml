@@ -75,9 +75,32 @@
         <entry file="file://$PROJECT_DIR$/src/com/nyampass/cabin/app/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
+              <caret line="47" column="35" selection-start-line="47" selection-start-column="35" selection-end-line="47" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ObservableList.java" pinned="false" current-in-tab="false">
+        <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/javafx-src.zip!/javafx/collections/ObservableList.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="63" column="19" selection-start-line="63" selection-start-column="19" selection-end-line="63" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MenuItem.java" pinned="false" current-in-tab="false">
+        <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/javafx-src.zip!/javafx/scene/control/MenuItem.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="304" column="22" selection-start-line="304" selection-start-column="22" selection-end-line="304" selection-end-column="22" />
+              <folding>
+                <element signature="e#10102#10103#0" expanded="true" />
+                <element signature="e#10148#10149#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -93,12 +116,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/nyampass/cabin/app/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="75" column="32" selection-start-line="75" selection-start-column="32" selection-end-line="75" selection-end-column="32" />
-              <folding />
+            <state vertical-scroll-proportion="0.6519722">
+              <caret line="83" column="32" selection-start-line="83" selection-start-column="32" selection-end-line="83" selection-end-column="32" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2000#2001#0" expanded="true" />
+                <element signature="e#2070#2071#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -116,8 +143,22 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="577" column="11" selection-start-line="577" selection-start-column="11" selection-end-line="577" selection-end-column="11" />
               <folding>
-                <element signature="e#23443#23444#0" expanded="true" />
-                <element signature="e#23515#23516#0" expanded="true" />
+                <element signature="e#0#97075#0" expanded="false" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#35734#35735#0" expanded="false" />
+                <element signature="e#35807#35808#0" expanded="false" />
+                <element signature="e#36124#36125#0" expanded="false" />
+                <element signature="e#36181#36182#0" expanded="false" />
+                <element signature="e#70230#70231#0" expanded="false" />
+                <element signature="e#70273#70274#0" expanded="false" />
+                <element signature="e#88130#88131#0" expanded="false" />
+                <element signature="e#88191#88192#0" expanded="false" />
+                <element signature="e#90079#90080#0" expanded="false" />
+                <element signature="e#90109#90110#0" expanded="false" />
+                <element signature="e#90847#90848#0" expanded="false" />
+                <element signature="e#90888#90889#0" expanded="false" />
+                <element signature="e#91951#91952#0" expanded="false" />
+                <element signature="e#92011#92012#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -133,17 +174,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="flag.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/flag.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.css" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/app.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.039893616">
+            <state vertical-scroll-proportion="-0.27272728">
               <caret line="1" column="29" selection-start-line="1" selection-start-column="29" selection-end-line="1" selection-end-column="29" />
               <folding />
             </state>
@@ -161,16 +195,6 @@
                 <element signature="e#211#212#0" expanded="true" />
                 <element signature="e#262#263#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="websocket.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/websocket.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -203,10 +227,10 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/com/nyampass/cabin/app/JSBridge.java" />
         <option value="$PROJECT_DIR$/res/client.html" />
-        <option value="$PROJECT_DIR$/src/com/nyampass/cabin/app/Controller.java" />
         <option value="$PROJECT_DIR$/res/app.fxml" />
-        <option value="$PROJECT_DIR$/src/com/nyampass/cabin/app/Main.java" />
         <option value="$PROJECT_DIR$/res/app.css" />
+        <option value="$PROJECT_DIR$/src/com/nyampass/cabin/app/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/nyampass/cabin/app/Controller.java" />
       </list>
     </option>
   </component>
@@ -470,6 +494,7 @@
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="cabin" />
     <property name="FullScreen" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
+    <property name="extract.method.default.visibility" value="private" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -851,7 +876,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2000#2001#0" expanded="true" />
+            <element signature="e#2070#2071#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -860,8 +889,22 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="577" column="11" selection-start-line="577" selection-start-column="11" selection-end-line="577" selection-end-column="11" />
           <folding>
-            <element signature="e#23443#23444#0" expanded="true" />
-            <element signature="e#23515#23516#0" expanded="true" />
+            <element signature="e#0#97075#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#35734#35735#0" expanded="false" />
+            <element signature="e#35807#35808#0" expanded="false" />
+            <element signature="e#36124#36125#0" expanded="false" />
+            <element signature="e#36181#36182#0" expanded="false" />
+            <element signature="e#70230#70231#0" expanded="false" />
+            <element signature="e#70273#70274#0" expanded="false" />
+            <element signature="e#88130#88131#0" expanded="false" />
+            <element signature="e#88191#88192#0" expanded="false" />
+            <element signature="e#90079#90080#0" expanded="false" />
+            <element signature="e#90109#90110#0" expanded="false" />
+            <element signature="e#90847#90848#0" expanded="false" />
+            <element signature="e#90888#90889#0" expanded="false" />
+            <element signature="e#91951#91952#0" expanded="false" />
+            <element signature="e#92011#92012#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -987,7 +1030,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2000#2001#0" expanded="true" />
+            <element signature="e#2070#2071#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1148,8 +1195,22 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="577" column="11" selection-start-line="577" selection-start-column="11" selection-end-line="577" selection-end-column="11" />
           <folding>
-            <element signature="e#23443#23444#0" expanded="true" />
-            <element signature="e#23515#23516#0" expanded="true" />
+            <element signature="e#0#97075#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#35734#35735#0" expanded="false" />
+            <element signature="e#35807#35808#0" expanded="false" />
+            <element signature="e#36124#36125#0" expanded="false" />
+            <element signature="e#36181#36182#0" expanded="false" />
+            <element signature="e#70230#70231#0" expanded="false" />
+            <element signature="e#70273#70274#0" expanded="false" />
+            <element signature="e#88130#88131#0" expanded="false" />
+            <element signature="e#88191#88192#0" expanded="false" />
+            <element signature="e#90079#90080#0" expanded="false" />
+            <element signature="e#90109#90110#0" expanded="false" />
+            <element signature="e#90847#90848#0" expanded="false" />
+            <element signature="e#90888#90889#0" expanded="false" />
+            <element signature="e#91951#91952#0" expanded="false" />
+            <element signature="e#92011#92012#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1167,10 +1228,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/nyampass/cabin/app/Controller.java">
+    <entry file="file://$PROJECT_DIR$/res/app.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.27272728">
+          <caret line="1" column="29" selection-start-line="1" selection-start-column="29" selection-end-line="1" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/javafx-src.zip!/javafx/scene/control/MenuItem.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="75" column="32" selection-start-line="75" selection-start-column="32" selection-end-line="75" selection-end-column="32" />
+          <caret line="304" column="22" selection-start-line="304" selection-start-column="22" selection-end-line="304" selection-end-column="22" />
+          <folding>
+            <element signature="e#10102#10103#0" expanded="true" />
+            <element signature="e#10148#10149#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/javafx-src.zip!/javafx/collections/ObservableList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="63" column="19" selection-start-line="63" selection-start-column="19" selection-end-line="63" selection-end-column="19" />
           <folding />
         </state>
       </provider>
@@ -1178,18 +1258,22 @@
     <entry file="file://$PROJECT_DIR$/src/com/nyampass/cabin/app/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
+          <caret line="47" column="35" selection-start-line="47" selection-start-column="35" selection-end-line="47" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/app.css">
+    <entry file="file://$PROJECT_DIR$/src/com/nyampass/cabin/app/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.039893616">
-          <caret line="1" column="29" selection-start-line="1" selection-start-column="29" selection-end-line="1" selection-end-column="29" />
-          <folding />
+        <state vertical-scroll-proportion="0.6519722">
+          <caret line="83" column="32" selection-start-line="83" selection-start-column="32" selection-end-line="83" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2000#2001#0" expanded="true" />
+            <element signature="e#2070#2071#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
