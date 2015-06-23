@@ -52,7 +52,7 @@
           <tabs>
             <Tab text="UI Mosaic">
               <content>
-                <TextArea fx:id="textArea" prefWidth="200.0" wrapText="true" />
+                <TextArea fx:id="textArea" prefWidth="200.0" text="remoteFirmata = app.firmata(&quot;7d9e&quot;, &quot;hoge&quot;);&#10;&#10;while (true) {&#10;  remoteFirmata.send(13, 1);&#10;  delay(1);&#10;  remoteFirmata.send(13, 0);&#10;  delay(1);&#10;}&#10;&#10;" wrapText="true" />
               </content>
             </Tab>
           </tabs>
