@@ -35,7 +35,7 @@
             <Insets />
           </HBox.margin>
         </Label>
-        <PasswordField id="password" fx:id="passwordField" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="200.0">
+        <PasswordField id="password" fx:id="passwordField" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="200.0" promptText="パスワード">
           <HBox.margin>
             <Insets bottom="5.0" top="5.0" fx:id="x1" />
           </HBox.margin>
