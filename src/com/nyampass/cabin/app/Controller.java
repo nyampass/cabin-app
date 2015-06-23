@@ -35,7 +35,6 @@ public class Controller implements Initializable {
     PasswordField passwordField;
 
     private static Controller instance;
-    private String peerId;
 
     public static Controller instance() {
         return instance;
@@ -55,30 +54,18 @@ public class Controller implements Initializable {
                 (ov, oldState, newState) -> {
                     if (newState == Worker.State.SUCCEEDED) {
                         JSObject window = (JSObject) webEngine.executeScript("window");
+
                         window.setMember("app", new JSBridge());
-                        webEngine.executeScript("console.log = function(message)\n" +
-                                "{\n" +
-                                "    app.log(message);\n" +
-                                "};");
+                        webEngine.executeScript("console.log = function(message)　{app.log(message);};");
 
                         webEngine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
                     }
                 });
 
-        JSObject window = (JSObject) webEngine.executeScript("window");
-        window.setMember("app", new JSBridge());
-        webEngine.executeScript("console.log = function(message)\n" +
-                "{\n" +
-                "    app.log(message);\n" +
-                "};");
-
-        webEngine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
-
         promotedCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             webEngine.executeScript("window.onPromotedChanged(" + Boolean.toString(newValue) + ", '" +
                     passwordField.getText() + "');");
         });
-
     }
 
     @FXML
@@ -90,10 +77,11 @@ public class Controller implements Initializable {
 
     public void appendLog(String text) {
         String date = DATE_FORMATER.format(new Date());
-        consoleArea.appendText("["+ date + "] " + text + "\n");
+        consoleArea.appendText("[" + date + "] " + text + "\n");
     }
 
     public void setPeerId(String peerId) {
-        peerIdLabel.setText("Peer Id: " + peerId);
+        peerIdLabel.setText("" +
+                "Id: " + peerId);
     }
 }

@@ -16,7 +16,7 @@
 
 <VBox alignment="CENTER" opacity="1.0" prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.nyampass.cabin.app.Controller">
   <children>
-    <HBox maxHeight="50.0" minHeight="60.0" prefHeight="60.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="ALWAYS">
+    <HBox fx:id="toolbar" maxHeight="50.0" minHeight="60.0" prefHeight="60.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="ALWAYS">
       <children>
         <Button id="button" fx:id="startButton" alignment="CENTER" cancelButton="false" contentDisplay="RIGHT" defaultButton="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" mouseTransparent="false" onAction="#onStart" prefHeight="40.0" prefWidth="40.0" style="" styleClass="push-button" text="" textAlignment="LEFT" textOverrun="CLIP" HBox.hgrow="ALWAYS">
           <graphic>
@@ -50,7 +50,7 @@
       <items>
         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
           <tabs>
-            <Tab text="UI Mosaic">
+            <Tab text="新規ファイル">
               <content>
                 <TextArea fx:id="textArea" prefWidth="200.0" text="remoteFirmata = app.firmata(&quot;7d9e&quot;, &quot;hoge&quot;);&#10;&#10;while (true) {&#10;  remoteFirmata.send(13, 1);&#10;  delay(1);&#10;  remoteFirmata.send(13, 0);&#10;  delay(1);&#10;}&#10;&#10;" wrapText="true" />
               </content>
@@ -62,9 +62,6 @@
     </SplitPane>
     <TextArea fx:id="consoleArea" prefHeight="150.0" prefWidth="800.0" />
   </children>
-  <effect>
-    <InnerShadow />
-  </effect>
   <padding>
     <Insets />
   </padding>
