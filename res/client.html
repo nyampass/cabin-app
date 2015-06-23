@@ -55,34 +55,25 @@ $(function() {
   }
 
   function appendMessage(message) {
-    app.log(message + '\n')
+    app.log(message)
   }
 
   startWebsocket();
 
-  $promoted.click(function() {
-    if ($(this).is(':checked')) {
-      var password = $('#password').val();
+  window.onPromotedChanged = function(checked, password) {
+    if (checked) {
       var request = {type: 'promote', from: peerId, password: password};
       doSend(JSON.stringify(request));
     } else {
       var request = {type: 'demote', from: peerId};
       doSend(JSON.stringify(request));
     }
-  });
+  }
 })
 </script>
     <title>cabin</title>
     <body>
       <div class="container">
-        <div class="menu-area">
-          <div class="promotion-menu">
-            <span>Password: </span>
-            <input id="password" type="text"/>
-            <input id="promoted" type="checkbox"/>
-            <span>待受可能</span>
-          </div>
-        </div>
       </div>
     </body>
 </html>

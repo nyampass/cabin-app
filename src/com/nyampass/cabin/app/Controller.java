@@ -1,12 +1,12 @@
 package com.nyampass.cabin.app;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
@@ -25,6 +25,10 @@ public class Controller implements Initializable {
     TextArea consoleArea;
     @FXML
     Label peerIdLabel;
+    @FXML
+    CheckBox promotedCheckbox;
+    @FXML
+    PasswordField passwordField;
 
     private static Controller instance;
     private String peerId;
@@ -65,6 +69,15 @@ public class Controller implements Initializable {
                 "};");
 
         webEngine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
+
+        promotedCheckbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                webEngine.executeScript("window.onPromotedChanged(" + Boolean.toString(newValue) + ", '" +
+                        passwordField.getText() + "');");
+            }
+        });
+
     }
 
     @FXML
