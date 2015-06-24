@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <script src="jquery.js"></script>
     <script src="websocket.js"></script>
+    <script src="processing.min.js"></script>
+    <script src="basic-example.pde"></script>
     <script>
 $(function() {
   var wsUri = "ws://cabin.nyampass.com/ws";
@@ -71,9 +73,12 @@ $(function() {
   }
 })
 </script>
+
     <title>cabin</title>
     <body>
       <div class="container">
       </div>
-    </body>
+      <script src="processing.min.js"></script>
+      <canvas data-processing-sources="basic-example.pde">
+  </body>
 </html>
