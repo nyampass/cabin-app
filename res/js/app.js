@@ -71,7 +71,7 @@ $(function() {
   }
 
   window.delay = function(second) {
-    setTimeout(function() {}, second * 1000);
+    app.delay(second);
   }
 
   window.run = function(code) {
