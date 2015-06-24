@@ -7,13 +7,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.function.Function;
+import java.util.function.IntFunction;
 
 public class Controller implements Initializable {
     @FXML
@@ -63,16 +69,27 @@ public class Controller implements Initializable {
         });
     }
 
+    @SuppressWarnings("UnusedParameters")
     @FXML
     protected void onStart(ActionEvent event) {
-        this.web.getEngine().executeScript(textArea.getText());
+        try {
+            this.web.getEngine().executeScript(textArea.getText());
+        } catch (JSException e) {
+            StringWriter writer = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(writer);
+            e.printStackTrace(printWriter);
+
+            appendLog(writer.toString());
+        }
     }
 
     private static final DateFormat DATE_FORMATER = new SimpleDateFormat("HH:mm:ss");
 
-    public void appendLog(String text) {
+    public void appendLog(String... texts) {
         String date = DATE_FORMATER.format(new Date());
-        consoleArea.appendText("[" + date + "] " + text + "\n");
+        for (String text : texts) {
+            consoleArea.appendText("[" + date + "] " + text + "\n");
+        }
     }
 
     public void setPeerId(String peerId) {
