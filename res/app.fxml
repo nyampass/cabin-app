@@ -22,7 +22,7 @@
           <graphic>
             <ImageView fitHeight="30.0" fitWidth="30.0" mouseTransparent="false" pickOnBounds="true" preserveRatio="true">
               <image>
-                <Image url="@flag.png" />
+                <Image url="@images/flag.png" />
               </image>
             </ImageView>
           </graphic>

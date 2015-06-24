@@ -23,7 +23,7 @@ public class Main extends Application {
         VBox root = FXMLLoader.load(res);
 
         for (int i = 16; i <= 512; i *= 2) {
-            stage.getIcons().add(new Image("icon_" + i + ".png"));
+            stage.getIcons().add(new Image("images/icon_" + i + ".png"));
         }
 
         setupMenu(root);
