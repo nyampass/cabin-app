@@ -62,4 +62,20 @@ $(function() {
       doSend(JSON.stringify(request));
     }
   }
+
+  window.firmata = function() {
+    console.log("called firmata");
+    this.send = function() {
+        console.log("called firmata.send");
+    }
+  }
+
+  window.delay = function(second) {
+    setTimeout(function() {}, second * 1000);
+  }
+
+  window.run = function(code) {
+    eval("function evalInContext() {" + code + ";}");
+    evalInContext.call();
+  }
 });

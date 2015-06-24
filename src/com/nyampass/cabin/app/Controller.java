@@ -38,6 +38,7 @@ public class Controller implements Initializable {
     PasswordField passwordField;
 
     private static Controller instance;
+    private JSObject windowObject;
 
     public static Controller instance() {
         return instance;
@@ -56,9 +57,8 @@ public class Controller implements Initializable {
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == Worker.State.SUCCEEDED) {
-                        JSObject window = (JSObject) webEngine.executeScript("window");
-
-                        window.setMember("app", new JSBridge());
+                        windowObject = (JSObject) webEngine.executeScript("window");
+                        windowObject.setMember("app", new JSBridge());
                         webEngine.executeScript("console.log = function(message)　{app.log(message);};");
                     }
                 });
@@ -73,7 +73,9 @@ public class Controller implements Initializable {
     @FXML
     protected void onStart(ActionEvent event) {
         try {
-            this.web.getEngine().executeScript(textArea.getText());
+            Object response = windowObject.call("run", textArea.getText());
+            appendLog(response.toString());
+
         } catch (JSException e) {
             StringWriter writer = new StringWriter();
             PrintWriter printWriter = new PrintWriter(writer);
@@ -99,6 +101,5 @@ public class Controller implements Initializable {
 
     public void onDebug() {
         web.getEngine().executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
-
     }
 }
