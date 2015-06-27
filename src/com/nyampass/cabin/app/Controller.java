@@ -1,5 +1,11 @@
 package com.nyampass.cabin.app;
 
+import gnu.expr.KawaScriptEngine;
+import gnu.expr.Language;
+import gnu.expr.ModuleBody;
+import gnu.lists.FString;
+import gnu.lists.LList;
+import gnu.mapping.Environment;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,16 +13,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import kawa.standard.Scheme;
 import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import javax.script.*;
+import java.io.*;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -73,8 +81,30 @@ public class Controller implements Initializable {
     @FXML
     protected void onStart(ActionEvent event) {
         try {
-            Object response = windowObject.call("run", textArea.getText());
-            appendLog(response.toString());
+            Scheme scheme = Scheme.getInstance();
+            Environment env = Scheme.builtin();
+
+            Language.setDefaults(scheme);
+            Environment.setGlobal(env);
+
+            new Thread(() -> {
+                ModuleBody.setMainPrintValues(true);
+                try {
+                    scheme.loadClass("com.nyampass.cabin.app.SchemeBridge");
+                    appendLog(scheme.eval(textArea.getText()).toString());
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+
+            }).start();
+
+            new Thread(() -> {
+
+                // (hello str)
+                // Object obj = LList.list2(env.getSymbol("hello"), new FString(str));
+            }).start();
 
         } catch (JSException e) {
             appendLog(e);
