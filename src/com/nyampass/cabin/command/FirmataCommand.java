@@ -1,18 +1,19 @@
 package com.nyampass.cabin.command;
 
-import jssc.SerialPort;
+import com.nyampass.cabin.lang.IFirmata;
 import jssc.SerialPortList;
 import org.firmata4j.Pin;
 import org.firmata4j.firmata.FirmataDevice;
 
 import java.io.IOException;
 
-/**
- * Created by tokusei on 15/06/27.
- */
 @SuppressWarnings("unused")
-public class FirmataCommand {
+public class FirmataCommand implements IFirmata {
     private final FirmataDevice device;
+
+    static {
+        CommandRunner.registerClass("Firmata", FirmataCommand.class);
+    }
 
     public FirmataCommand() {
         if (SerialPortList.getPortNames().length <= 0) {
@@ -28,6 +29,7 @@ public class FirmataCommand {
         }
     }
 
+    @Override
     public void digitalWrite(int pinNo, boolean value) {
         Pin pin = this.device.getPin(pinNo);
         try {

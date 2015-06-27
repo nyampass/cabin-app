@@ -104,20 +104,13 @@ public class Controller implements Initializable {
             new Thread(() -> {
                 ModuleBody.setMainPrintValues(true);
                 try {
-                    scheme.loadClass("com.nyampass.cabin.app.SchemeBridge");
+                    scheme.loadClass("com.nyampass.cabin.lang.SchemeBridge");
                     appendLog(scheme.eval(textArea.getText()).toString());
-                } catch (ClassNotFoundException e) {
+                } catch (Throwable e) {
+                    appendLog(e);
                     e.printStackTrace();
-                } catch (Throwable t) {
-                    t.printStackTrace();
                 }
 
-            }).start();
-
-            new Thread(() -> {
-
-                // (hello str)
-                // Object obj = LList.list2(env.getSymbol("hello"), new FString(str));
             }).start();
 
         } catch (JSException e) {
@@ -143,7 +136,7 @@ public class Controller implements Initializable {
         // web.getEngine().executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
     }
 
-    public void appendLog(Exception e) {
+    public void appendLog(Throwable e) {
         StringWriter writer = new StringWriter();
         PrintWriter printWriter = new PrintWriter(writer);
         e.printStackTrace(printWriter);

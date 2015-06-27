@@ -1,5 +1,7 @@
-package com.nyampass.cabin.app;
+package com.nyampass.cabin.lang;
 
+import com.nyampass.cabin.app.Controller;
+import com.nyampass.cabin.command.CommandRunner;
 import com.nyampass.cabin.command.FirmataCommand;
 import gnu.expr.ModuleBody;
 import gnu.expr.ModuleMethod;
@@ -30,17 +32,32 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
         public Object apply1(Object second) throws Throwable {
             try {
                 Thread.sleep(((DFloNum)second).longValue() * 1000);
+                return Boolean.valueOf(true);
             } catch (InterruptedException e) {
                 Controller.instance().appendLog(e);
+                return Boolean.valueOf(false);
             }
-            return IntNum.make(3);
         }
     };
 
     public static final ProcedureN firmata = new ProcedureN("firmata") {
         @Override
         public Object applyN(Object[] objects) throws Throwable {
+            if (objects.length == 2)
+                return new Firmata((String)objects[0], (String)objects[1]);
             return new FirmataCommand();
         }
     };
+
+    static class Firmata extends CommandRunner implements IFirmata {
+        public Firmata(String peerId, String password) {
+            super("Firmata", peerId, password);
+        }
+
+        @Override
+        public void digitalWrite(int pinNo, boolean value) {
+            Object response = run("Firmata", new Object[] {Integer.valueOf(pinNo), Boolean.valueOf(value)});
+
+        }
+    }
 }

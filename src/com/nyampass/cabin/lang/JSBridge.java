@@ -1,4 +1,6 @@
-package com.nyampass.cabin.app;
+package com.nyampass.cabin.lang;
+
+import com.nyampass.cabin.app.Controller;
 
 @SuppressWarnings("unused")
 public class JSBridge {
