@@ -18,6 +18,13 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
         super.run(ctx);
     }
 
+    public static final Procedure0 canvas = new Procedure0("canvas") {
+        @Override
+        public Object apply0() throws Throwable {
+            return Controller.instance().graphicsContext();
+        }
+    };
+
     public static final Procedure1 delay = new Procedure1("delay") {
         @Override
         public Object apply1(Object second) throws Throwable {
