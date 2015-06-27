@@ -8,11 +8,14 @@ import gnu.lists.LList;
 import gnu.mapping.Environment;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import kawa.standard.Scheme;
@@ -24,10 +27,7 @@ import java.io.*;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -50,6 +50,7 @@ public class Controller implements Initializable {
     private static Controller instance;
     private JSObject windowObject;
     private GraphicsContext graphicsContext;
+    private TextArea keyEventTextArea;
 
     public static Controller instance() {
         return instance;
@@ -64,36 +65,10 @@ public class Controller implements Initializable {
 
         this.graphicsContext = this.canvas.getGraphicsContext2D();
 
-
-        /*
-
-        final WebEngine webEngine = web.getEngine();
-
-        final URL html = getClass().getResource("/client.html");
-        webEngine.load(html.toExternalForm());
-
-        webEngine.setOnAlert(event -> System.out.println("alert:" + event.getData()));
-
-        webEngine.getLoadWorker().stateProperty().addListener(
-                (ov, oldState, newState) -> {
-                    if (newState == Worker.State.SUCCEEDED) {
-                        windowObject = (JSObject) webEngine.executeScript("window");
-                        windowObject.setMember("app", new JSBridge());
-                        webEngine.executeScript("console.log = function(message)　{app.log(message);};");
-                    }
-                });
-
-        promotedCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            webEngine.executeScript("window.onPromotedChanged(" + Boolean.toString(newValue) + ", '" +
-                    passwordField.getText() + "');");
-        });
-
-        */
+        setKeyEventTextArea(this.textArea);
     }
 
-    @SuppressWarnings("UnusedParameters")
-    @FXML
-    protected void onStart(ActionEvent event) {
+    private void eval() {
         try {
             Scheme scheme = Scheme.getInstance();
             Environment env = Scheme.builtin();
@@ -116,6 +91,12 @@ public class Controller implements Initializable {
         } catch (JSException e) {
             appendLog(e);
         }
+    }
+
+    @SuppressWarnings("UnusedParameters")
+    @FXML
+    protected void onStart(ActionEvent event) {
+        eval();
     }
 
     private static final DateFormat DATE_FORMATER = new SimpleDateFormat("HH:mm:ss");
@@ -142,5 +123,22 @@ public class Controller implements Initializable {
         e.printStackTrace(printWriter);
 
         appendLog(writer.toString());
+    }
+
+    public void setKeyEventTextArea(TextArea textArea) {
+        final Map<KeyCode, Boolean> pressed = new HashMap<>();
+
+        textArea.setOnKeyPressed(event -> {
+            pressed.put(event.getCode(), true);
+
+            if (pressed.get(KeyCode.COMMAND) && pressed.get(KeyCode.ENTER)) {
+                eval();
+            }
+
+        });
+
+        textArea.setOnKeyReleased(event -> {
+            pressed.remove(event.getCode());
+        });
     }
 }
