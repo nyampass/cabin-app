@@ -10,7 +10,7 @@ public class JSBridge {
         Controller.instance().setPeerId(id);
     }
 
-    public void delay(float second) {
+    public static void delay(float second) {
         try {
             Thread.sleep((long) (second * 1000));
         } catch (InterruptedException e) {
