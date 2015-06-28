@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -26,10 +25,13 @@ public class Main extends Application {
     }
 
     private Stage setupStage(Stage stage) {
-        URL res = getClass().getClassLoader().getResource("app.fxml");
-        VBox root = null;
+        VBox root;
+
         try {
+            URL res = getClass().getClassLoader().getResource("app.fxml");
+            assert res != null;
             root = FXMLLoader.load(res);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -44,7 +46,6 @@ public class Main extends Application {
         stage.setScene(new Scene(root, 800, 600));
         return stage;
     }
-
 
     private void setupMenu(VBox root) {
         MenuBar menu = new MenuBar();
@@ -76,7 +77,6 @@ public class Main extends Application {
         menuItem.setOnAction(action);
         return menuItem;
     }
-
 
     public static void main(String[] args) {
         launch(args);

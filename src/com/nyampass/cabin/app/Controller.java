@@ -1,36 +1,28 @@
 package com.nyampass.cabin.app;
 
 import com.nyampass.cabin.WebSocket;
-import gnu.expr.KawaScriptEngine;
 import gnu.expr.Language;
 import gnu.expr.ModuleBody;
-import gnu.lists.FString;
-import gnu.lists.LList;
 import gnu.mapping.Environment;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import kawa.standard.Scheme;
 import netscape.javascript.JSException;
-import netscape.javascript.JSObject;
 
-import javax.script.*;
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.IntFunction;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 public class Controller implements Initializable, WebSocket.WebSocketHandler {
     @FXML
@@ -49,10 +41,11 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     Canvas canvas;
 
     private static Controller instance;
-    private JSObject windowObject;
     private GraphicsContext graphicsContext;
-    private TextArea keyEventTextArea;
     private WebSocket socket;
+
+    public Controller() {
+    }
 
     public static Controller instance() {
         return instance;
@@ -136,7 +129,7 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
         textArea.setOnKeyPressed(event -> {
             pressed.put(event.getCode(), true);
 
-            if (pressed.get(KeyCode.COMMAND) && pressed.get(KeyCode.ENTER)) {
+            if (pressed.containsKey(KeyCode.COMMAND) && pressed.containsKey(KeyCode.ENTER)) {
                 eval();
             }
 
