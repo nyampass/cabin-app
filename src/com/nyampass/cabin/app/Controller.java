@@ -40,6 +40,8 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     @FXML
     Canvas canvas;
 
+    private String peerId;
+
     private static Controller instance;
     private GraphicsContext graphicsContext;
     private WebSocket socket;
@@ -59,10 +61,18 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
         instance = this;
 
         this.graphicsContext = this.canvas.getGraphicsContext2D();
+        this.socket = new WebSocket(this);
 
         setKeyEventTextArea(this.textArea);
 
-        this.socket = new WebSocket(this);
+        this.promotedCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                this.socket.sendRequestPromote(peerId, passwordField.getText());
+            } else {
+                this.socket.sendDemote(peerId);
+            }
+        });
+
 
     }
 
@@ -106,15 +116,6 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
         }
     }
 
-    public void setPeerId(String peerId) {
-        peerIdLabel.setText("" +
-                "Id: " + peerId);
-    }
-
-    public void onDebug() {
-        // web.getEngine().executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
-    }
-
     public void appendLog(Throwable e) {
         StringWriter writer = new StringWriter();
         PrintWriter printWriter = new PrintWriter(writer);
@@ -148,5 +149,12 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     @Override
     public void appendLog(String log) {
         this.appendLog(new String[]{log});
+    }
+
+    @Override
+    public void onSetPeerId(String peerId) {
+        this.peerId = peerId;
+        peerIdLabel.setText("" +
+                "Id: " + peerId);
     }
 }
