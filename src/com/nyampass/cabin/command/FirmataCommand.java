@@ -1,6 +1,5 @@
 package com.nyampass.cabin.command;
 
-import com.nyampass.cabin.lang.IFirmata;
 import jssc.SerialPortList;
 import org.firmata4j.Pin;
 import org.firmata4j.firmata.FirmataDevice;

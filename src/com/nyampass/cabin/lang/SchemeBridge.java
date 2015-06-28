@@ -3,15 +3,11 @@ package com.nyampass.cabin.lang;
 import com.nyampass.cabin.app.Controller;
 import com.nyampass.cabin.command.CommandRunner;
 import com.nyampass.cabin.command.FirmataCommand;
+import com.nyampass.cabin.command.IFirmata;
 import gnu.expr.ModuleBody;
-import gnu.expr.ModuleMethod;
 import gnu.expr.RunnableModule;
-import gnu.lists.Pair;
 import gnu.mapping.*;
 import gnu.math.DFloNum;
-import gnu.math.IntNum;
-import gnu.lists.*;
-import gnu.mapping.*;
 
 @SuppressWarnings("unused")
 public class SchemeBridge extends ModuleBody implements RunnableModule {
@@ -56,8 +52,7 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
 
         @Override
         public void digitalWrite(int pinNo, boolean value) {
-            Object response = run("Firmata", new Object[] {Integer.valueOf(pinNo), Boolean.valueOf(value)});
-
+            run("Firmata", new Object[] {Integer.valueOf(pinNo), Boolean.valueOf(value)});
         }
     }
 }

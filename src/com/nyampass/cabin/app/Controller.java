@@ -1,5 +1,6 @@
 package com.nyampass.cabin.app;
 
+import com.nyampass.cabin.WebSocket;
 import gnu.expr.KawaScriptEngine;
 import gnu.expr.Language;
 import gnu.expr.ModuleBody;
@@ -31,7 +32,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
-public class Controller implements Initializable {
+public class Controller implements Initializable, WebSocket.WebSocketHandler {
     @FXML
     Button startButton;
     @FXML
@@ -51,6 +52,7 @@ public class Controller implements Initializable {
     private JSObject windowObject;
     private GraphicsContext graphicsContext;
     private TextArea keyEventTextArea;
+    private WebSocket socket;
 
     public static Controller instance() {
         return instance;
@@ -66,6 +68,9 @@ public class Controller implements Initializable {
         this.graphicsContext = this.canvas.getGraphicsContext2D();
 
         setKeyEventTextArea(this.textArea);
+
+        this.socket = new WebSocket(this);
+
     }
 
     private void eval() {
@@ -140,5 +145,15 @@ public class Controller implements Initializable {
         textArea.setOnKeyReleased(event -> {
             pressed.remove(event.getCode());
         });
+    }
+
+    @Override
+    public void handleMessage(String message) {
+
+    }
+
+    @Override
+    public void appendLog(String log) {
+        this.appendLog(new String[]{log});
     }
 }
