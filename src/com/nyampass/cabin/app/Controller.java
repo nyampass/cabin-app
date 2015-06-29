@@ -3,6 +3,8 @@ package com.nyampass.cabin.app;
 import com.nyampass.cabin.Driver;
 import com.nyampass.cabin.Environ;
 import com.nyampass.cabin.WebSocket;
+import com.nyampass.cabin.command.FirmataCommand;
+import com.nyampass.cabin.lang.SchemeBridge;
 import gnu.expr.Language;
 import gnu.expr.ModuleBody;
 import gnu.mapping.Environment;
@@ -58,6 +60,9 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
         this.socket = new WebSocket(this);
 
         setKeyEventTextArea(this.textArea);
+
+        SchemeBridge.initSchemeBridge();
+        Class c = FirmataCommand.class;
 
         this.promotedCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {

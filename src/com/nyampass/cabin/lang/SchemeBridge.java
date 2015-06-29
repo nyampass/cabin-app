@@ -14,6 +14,10 @@ import gnu.math.DFloNum;
 public class SchemeBridge extends ModuleBody implements RunnableModule {
     private CallContext context;
 
+    public static int initSchemeBridge() {
+        return 0;
+    }
+
     @Override
     public void run(CallContext ctx) throws Throwable {
         this.context = ctx;
