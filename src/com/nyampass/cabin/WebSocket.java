@@ -71,7 +71,7 @@ public class WebSocket {
         this.session.getAsyncRemote().sendText(message);
     }
 
-    public void sendRequestPromote(String from, String password) {
+    public void sendPromote(String from, String password) {
         String request = new Request(Request.Type.Promote, from).password(password).toJson();
         send(request);
     }
