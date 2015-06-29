@@ -65,6 +65,10 @@ public class WebSocket {
                 case Demote:
                     // FIXME: check if status is ok
                     break;
+                case Command:
+                    Request request = mapper.readValue(message, Request.class);
+                    handler.handleCommand(request);
+                    break;
                 case Result:
                     queue.add(response);
                     break;
@@ -113,13 +117,31 @@ public class WebSocket {
         return queue.poll(timeout, unit);
     }
 
+    public void sendResult(String id, String from, String to, Object ret) {
+        String request = new Request(id)
+                .from(from)
+                .to(to)
+                .result(ret)
+                .toJson();
+        send(request);
+    }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Response {
         enum Type {
-            Promote, Demote, Connected;
+            Promote, Demote, Connected, Command, Result;
 
             @JsonCreator
             public static Type fromString(String value) {
+                return valueOf(StringUtils.capitalize(value));
+            }
+        }
+
+        enum ResultType {
+            Int, String, Bool;
+            @JsonCreator
+            public static ResultType fromString(String value) {
                 return valueOf(StringUtils.capitalize(value));
             }
         }
@@ -129,14 +151,17 @@ public class WebSocket {
 
         public String status;
 
+        public Object value;
+
         @JsonProperty(value = "peer-id")
         public String peerId;
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Request {
         enum Type {
-            Promote, Demote;
+            Promote, Demote, Command, Result;
 
             @SuppressWarnings("unused")
             @JsonValue
@@ -153,6 +178,8 @@ public class WebSocket {
         public String klass;
         public String command;
         public List<Object> args;
+
+        public Object value;
 
         Request() {
         }
@@ -173,6 +200,11 @@ public class WebSocket {
 
         Request to(String to) {
             this.to = to;
+            return this;
+        }
+
+        Request result(Object value) {
+            this.value = value;
             return this;
         }
 
@@ -202,7 +234,7 @@ public class WebSocket {
     }
 
     public interface WebSocketHandler {
-        void handleMessage(String message);
+        void handleCommand(Request command);
 
         void appendLog(String log);
 

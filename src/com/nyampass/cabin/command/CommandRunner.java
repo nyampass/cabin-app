@@ -1,9 +1,9 @@
 package com.nyampass.cabin.command;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import com.nyampass.cabin.Environ;
+import com.nyampass.cabin.WebSocket;
 
 public class CommandRunner {
     private static final Map<String, Class> classes = new HashMap<>();
@@ -22,33 +22,41 @@ public class CommandRunner {
         classes.put(name, klass);
     }
 
-    public Response run(String name, Object[] args) {
+    public Object run(String name, Object[] args) {
         return run(command(name, Arrays.asList(args)));
     }
 
-    public Response run(String name, List<Object> args) {
+    public Object run(String name, List<Object> args) {
         return run(command(name, args));
     }
 
-    private Response run(Command command) {
-        // do something
-        return null;
+    private Object run(Command command) {
+        Environ environ = Environ.instance();
+        String from = environ.peerId;
+        WebSocket socket = environ.socket;
+        String id = UUID.randomUUID().toString();
+
+        socket.sendCommand(id, from, to, command.password, command.klass, command.command, command.args);
+
+        WebSocket.Response response = null;
+        try {
+            response = socket.getNextResponse();
+            if (id.equals(response.id)) {
+                return response.value;
+            } else {
+                throw new IllegalStateException();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Command command(String name, List<Object> args) {
-        return new Command(this.klass, name, this.peerId, this.password);
+        return new Command(this.klass, name, this.to, this.password, args);
     }
 
-    public static Command command(String klass, String commmad, String peerId, String password) {
-        return new Command(klass, commmad, peerId, password);
-    }
-
-    public enum ResponseType { Int, String, Bool }
-
-    public static class Response {
-        public ResponseType type;
-        public Object value;
-
+    public static Command command(String klass, String commmad, String peerId, String password, List<Object> args) {
+        return new Command(klass, commmad, peerId, password, args);
     }
 
     private static class Command {
@@ -56,12 +64,14 @@ public class CommandRunner {
         private final String command;
         private final String peerId;
         private final String password;
+        private final List<Object> args;
 
-        public Command(String klass, String command, String peerId, String password) {
+        public Command(String klass, String command, String peerId, String password, List<Object> args) {
             this.klass = klass;
             this.command = command;
             this.peerId = peerId;
             this.password = password;
+            this.args = args;
         }
     }
 }

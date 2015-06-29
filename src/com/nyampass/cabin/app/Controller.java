@@ -131,8 +131,10 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     }
 
     @Override
-    public void handleMessage(String message) {
+    public void handleCommand(WebSocket.Request command) {
+        Object ret = Driver.dispatch(command.klass, command.command, command.args);
 
+        this.socket.sendResult(command.id, command.to, command.from, ret);
     }
 
     @Override
