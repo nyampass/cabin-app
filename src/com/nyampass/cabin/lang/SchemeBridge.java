@@ -50,7 +50,7 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
         }
     };
 
-    static class Firmata extends CommandRunner implements IFirmata {
+    public static class Firmata extends CommandRunner implements IFirmata {
         public Firmata(String peerId, String password) {
             super("Firmata", peerId, password);
         }
