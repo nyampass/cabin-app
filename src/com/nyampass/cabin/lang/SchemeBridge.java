@@ -33,7 +33,6 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
                 Thread.sleep(((DFloNum) second).longValue() * 1000);
                 return true;
             } catch (InterruptedException e) {
-                Controller.instance().appendLog(e);
                 return false;
             }
         }
