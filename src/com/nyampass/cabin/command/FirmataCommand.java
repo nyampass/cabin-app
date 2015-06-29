@@ -1,5 +1,6 @@
 package com.nyampass.cabin.command;
 
+import com.nyampass.cabin.Driver;
 import jssc.SerialPortList;
 import org.firmata4j.Pin;
 import org.firmata4j.firmata.FirmataDevice;
@@ -11,7 +12,7 @@ public class FirmataCommand implements IFirmata {
     private final FirmataDevice device;
 
     static {
-        CommandRunner.registerClass("Firmata", FirmataCommand.class);
+        Driver.registerClass("Firmata", FirmataCommand.class);
     }
 
     public FirmataCommand() {

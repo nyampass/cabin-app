@@ -1,13 +1,11 @@
 package com.nyampass.cabin.command;
 
-import java.util.HashMap;
-import java.util.Map;
 import com.nyampass.cabin.Environ;
 import com.nyampass.cabin.WebSocket;
 
-public class CommandRunner {
-    private static final Map<String, Class> classes = new HashMap<>();
+import java.util.*;
 
+public class CommandRunner {
     private final String klass;
     private final String password;
     private final String to;
@@ -16,10 +14,6 @@ public class CommandRunner {
         this.klass = klass;
         this.to = to;
         this.password = password;
-    }
-
-    public static void registerClass(String name, Class klass) {
-        classes.put(name, klass);
     }
 
     public Object run(String name, Object[] args) {

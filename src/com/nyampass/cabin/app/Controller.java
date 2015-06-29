@@ -1,5 +1,6 @@
 package com.nyampass.cabin.app;
 
+import com.nyampass.cabin.Driver;
 import com.nyampass.cabin.Environ;
 import com.nyampass.cabin.WebSocket;
 import gnu.expr.Language;
