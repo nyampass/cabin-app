@@ -42,8 +42,6 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
     public static final ProcedureN firmata = new ProcedureN("firmata") {
         @Override
         public Object applyN(Object[] objects) throws Throwable {
-
-            SchemeBridge.this.context.
             if (objects.length == 2)
                 return new Firmata((String)objects[0], (String)objects[1]);
             return new FirmataCommand();
