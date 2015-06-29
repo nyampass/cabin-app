@@ -1,5 +1,6 @@
 package com.nyampass.cabin.lang;
 
+import com.nyampass.cabin.Environ;
 import com.nyampass.cabin.app.Controller;
 import com.nyampass.cabin.command.CommandRunner;
 import com.nyampass.cabin.command.FirmataCommand;
@@ -22,7 +23,7 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
     public static final Procedure0 canvas = new Procedure0("canvas") {
         @Override
         public Object apply0() throws Throwable {
-            return Controller.instance().graphicsContext();
+            return Environ.instance().graphicsContext;
         }
     };
 

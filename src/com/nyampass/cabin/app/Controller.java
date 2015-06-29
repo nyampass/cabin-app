@@ -1,5 +1,6 @@
 package com.nyampass.cabin.app;
 
+import com.nyampass.cabin.Environ;
 import com.nyampass.cabin.WebSocket;
 import gnu.expr.Language;
 import gnu.expr.ModuleBody;
@@ -42,15 +43,10 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
 
     private String peerId;
 
-    private static Controller instance;
     private GraphicsContext graphicsContext;
     private WebSocket socket;
 
     public Controller() {
-    }
-
-    public static Controller instance() {
-        return instance;
     }
 
     public GraphicsContext graphicsContext() {
@@ -58,8 +54,6 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     }
 
     public void initialize(URL location, ResourceBundle resources) {
-        instance = this;
-
         this.graphicsContext = this.canvas.getGraphicsContext2D();
         this.socket = new WebSocket(this);
 
@@ -86,6 +80,10 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
 
         new Thread(() -> {
             try {
+                Environ environ = Environ.instance();
+                environ.peerId = peerId;
+                environ.socket = socket;
+                environ.graphicsContext = graphicsContext;
                 scheme.loadClass("com.nyampass.cabin.lang.SchemeBridge");
                 appendLog(scheme.eval(textArea.getText()).toString());
 
