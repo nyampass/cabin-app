@@ -76,41 +76,36 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
 
     }
 
-    private void eval() {
-        try {
-            Scheme scheme = Scheme.getInstance();
-            Environment env = Scheme.builtin();
+    private void evalScheme() {
+        Scheme scheme = Scheme.getInstance();
+        Environment env = Scheme.builtin();
 
-            Language.setDefaults(scheme);
-            Environment.setGlobal(env);
+        Language.setDefaults(scheme);
+        Environment.setGlobal(env);
+        ModuleBody.setMainPrintValues(true);
 
-            new Thread(() -> {
-                ModuleBody.setMainPrintValues(true);
-                try {
-                    scheme.loadClass("com.nyampass.cabin.lang.SchemeBridge");
-                    appendLog(scheme.eval(textArea.getText()).toString());
-                } catch (Throwable e) {
-                    appendLog(e);
-                    e.printStackTrace();
-                }
+        new Thread(() -> {
+            try {
+                scheme.loadClass("com.nyampass.cabin.lang.SchemeBridge");
+                appendLog(scheme.eval(textArea.getText()).toString());
 
-            }).start();
-
-        } catch (JSException e) {
-            appendLog(e);
-        }
+            } catch (Throwable e) {
+                e.printStackTrace();
+                appendLog(e);
+            }
+        }).start();
     }
 
     @SuppressWarnings("UnusedParameters")
     @FXML
     protected void onStart(ActionEvent event) {
-        eval();
+        evalScheme();
     }
 
-    private static final DateFormat DATE_FORMATER = new SimpleDateFormat("HH:mm:ss");
+    private static final DateFormat DATE_FORMATTER = new SimpleDateFormat("HH:mm:ss");
 
     public void appendLog(String... texts) {
-        String date = DATE_FORMATER.format(new Date());
+        String date = DATE_FORMATTER.format(new Date());
         for (String text : texts) {
             consoleArea.appendText("[" + date + "] " + text + "\n");
         }
@@ -131,14 +126,11 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
             pressed.put(event.getCode(), true);
 
             if (pressed.containsKey(KeyCode.COMMAND) && pressed.containsKey(KeyCode.ENTER)) {
-                eval();
+                evalScheme();
             }
-
         });
 
-        textArea.setOnKeyReleased(event -> {
-            pressed.remove(event.getCode());
-        });
+        textArea.setOnKeyReleased(event -> pressed.remove(event.getCode()));
     }
 
     @Override

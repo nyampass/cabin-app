@@ -11,8 +11,11 @@ import gnu.math.DFloNum;
 
 @SuppressWarnings("unused")
 public class SchemeBridge extends ModuleBody implements RunnableModule {
+    private CallContext context;
+
     @Override
     public void run(CallContext ctx) throws Throwable {
+        this.context = ctx;
         super.run(ctx);
     }
 
@@ -27,11 +30,11 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
         @Override
         public Object apply1(Object second) throws Throwable {
             try {
-                Thread.sleep(((DFloNum)second).longValue() * 1000);
-                return Boolean.valueOf(true);
+                Thread.sleep(((DFloNum) second).longValue() * 1000);
+                return true;
             } catch (InterruptedException e) {
                 Controller.instance().appendLog(e);
-                return Boolean.valueOf(false);
+                return false;
             }
         }
     };
@@ -39,6 +42,8 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
     public static final ProcedureN firmata = new ProcedureN("firmata") {
         @Override
         public Object applyN(Object[] objects) throws Throwable {
+
+            SchemeBridge.this.context.
             if (objects.length == 2)
                 return new Firmata((String)objects[0], (String)objects[1]);
             return new FirmataCommand();
@@ -52,7 +57,7 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
 
         @Override
         public void digitalWrite(int pinNo, boolean value) {
-            run("Firmata", new Object[] {Integer.valueOf(pinNo), Boolean.valueOf(value)});
+            run("Firmata", new Object[] {pinNo, value});
         }
     }
 }
