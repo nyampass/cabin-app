@@ -13,7 +13,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import kawa.standard.Scheme;
-import netscape.javascript.JSException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
