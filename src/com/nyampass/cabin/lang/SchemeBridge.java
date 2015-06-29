@@ -54,8 +54,8 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
         }
 
         @Override
-        public void digitalWrite(int pinNo, boolean value) {
-            run("Firmata", new Object[] {pinNo, value});
+        public void digitalWrite(int pinNo, boolean value){
+            run("digitalWrite", new Object[] {pinNo, value});
         }
     }
 }
