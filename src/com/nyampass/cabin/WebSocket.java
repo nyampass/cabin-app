@@ -8,12 +8,17 @@ import com.sun.xml.internal.ws.util.StringUtils;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 @ClientEndpoint
 public class WebSocket {
     Session session = null;
     private final WebSocketHandler handler;
+
+    private final BlockingQueue<Response> queue = new LinkedBlockingQueue<Response>();
 
     private static final URI ENDPOINT_URI = URI.create("ws://cabin.nyampass.com/ws");
 
@@ -54,6 +59,13 @@ public class WebSocket {
                 case Connected:
                     this.handler.onSetPeerId(response.peerId);
                     break;
+                case Promote:
+                case Demote:
+                    // FIXME: check if status is ok
+                    break;
+                case Result:
+                    queue.add(response);
+                    break;
             }
 
         } catch (IOException e) {
@@ -79,6 +91,14 @@ public class WebSocket {
     public void sendDemote(String from) {
         String request = new Request(Request.Type.Demote, from).toJson();
         send(request);
+    }
+
+    public Response getNextResponse() throws InterruptedException {
+        return queue.take();
+    }
+
+    public Response getNextResponse(long timeout, TimeUnit unit) throws InterruptedException {
+        return queue.poll(timeout, unit);
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
