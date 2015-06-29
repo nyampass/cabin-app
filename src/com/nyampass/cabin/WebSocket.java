@@ -8,6 +8,8 @@ import com.sun.xml.internal.ws.util.StringUtils;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -93,6 +95,16 @@ public class WebSocket {
         send(request);
     }
 
+    public void sendCommand(String id, String from, String to, String password, String klass, String command, List<Object> args) {
+        String request = new Request(id)
+                .from(from)
+                .to(to)
+                .password(password)
+                .command(klass, command, args)
+                .toJson();
+        send(request);
+    }
+
     public Response getNextResponse() throws InterruptedException {
         return queue.take();
     }
@@ -112,6 +124,7 @@ public class WebSocket {
             }
         }
 
+        public String id;
         public Type type;
 
         public String status;
@@ -132,17 +145,47 @@ public class WebSocket {
             }
         }
 
+        public String id;
         public Type type;
         public String from;
+        public String to;
         public String password;
+        public String klass;
+        public String command;
+        public List<Object> args;
+
+        Request() {
+        }
+
+        Request(String id) {
+            this.id = id;
+        }
 
         Request(Type type, String from) {
             this.type = type;
             this.from = from;
         }
 
+        Request from(String from) {
+            this.from = from;
+            return this;
+        }
+
+        Request to(String to) {
+            this.to = to;
+            return this;
+        }
+
         Request password(String password) {
             this.password = password;
+            return this;
+        }
+
+        Request command(String klass, String command, List<Object> args) {
+            this.type = Request.Type.Command;
+            this.klass = klass;
+            this.command = command;
+            this.args = args;
             return this;
         }
 
