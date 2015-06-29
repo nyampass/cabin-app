@@ -1,5 +1,6 @@
 package com.nyampass.cabin.app;
 
+import com.nyampass.cabin.Driver;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -79,6 +80,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        Driver.load();
         launch(args);
     }
 }

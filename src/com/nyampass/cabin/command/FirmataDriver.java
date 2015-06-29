@@ -8,14 +8,10 @@ import org.firmata4j.firmata.FirmataDevice;
 import java.io.IOException;
 
 @SuppressWarnings("unused")
-public class FirmataCommand implements IFirmata {
+public class FirmataDriver implements IFirmata {
     private final FirmataDevice device;
 
-    static {
-        Driver.registerClass("Firmata", FirmataCommand.class);
-    }
-
-    public FirmataCommand() {
+    public FirmataDriver() {
         if (SerialPortList.getPortNames().length <= 0) {
             throw new RuntimeException("not found serial port");
         }

@@ -3,11 +3,10 @@ package com.nyampass.cabin.app;
 import com.nyampass.cabin.Driver;
 import com.nyampass.cabin.Environ;
 import com.nyampass.cabin.WebSocket;
-import com.nyampass.cabin.command.FirmataCommand;
-import com.nyampass.cabin.lang.SchemeBridge;
 import gnu.expr.Language;
 import gnu.expr.ModuleBody;
 import gnu.mapping.Environment;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,18 +50,11 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     public Controller() {
     }
 
-    public GraphicsContext graphicsContext() {
-        return this.graphicsContext;
-    }
-
     public void initialize(URL location, ResourceBundle resources) {
         this.graphicsContext = this.canvas.getGraphicsContext2D();
         this.socket = new WebSocket(this);
 
         setKeyEventTextArea(this.textArea);
-
-        SchemeBridge.initSchemeBridge();
-        Class c = FirmataCommand.class;
 
         this.promotedCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -150,8 +142,10 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
 
     @Override
     public void onSetPeerId(String peerId) {
-        this.peerId = peerId;
-        peerIdLabel.setText("" +
-                "Id: " + peerId);
+        Platform.runLater(() -> {
+            Controller.this.peerId = peerId;
+            peerIdLabel.setText("" +
+                    "Id: " + peerId);
+        });
     }
 }

@@ -1,9 +1,8 @@
 package com.nyampass.cabin.lang;
 
 import com.nyampass.cabin.Environ;
-import com.nyampass.cabin.app.Controller;
 import com.nyampass.cabin.command.CommandRunner;
-import com.nyampass.cabin.command.FirmataCommand;
+import com.nyampass.cabin.command.FirmataDriver;
 import com.nyampass.cabin.command.IFirmata;
 import gnu.expr.ModuleBody;
 import gnu.expr.RunnableModule;
@@ -13,10 +12,6 @@ import gnu.math.DFloNum;
 @SuppressWarnings("unused")
 public class SchemeBridge extends ModuleBody implements RunnableModule {
     private CallContext context;
-
-    public static int initSchemeBridge() {
-        return 0;
-    }
 
     @Override
     public void run(CallContext ctx) throws Throwable {
@@ -48,7 +43,7 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
         public Object applyN(Object[] objects) throws Throwable {
             if (objects.length == 2)
                 return new Firmata((String)objects[0], (String)objects[1]);
-            return new FirmataCommand();
+            return new FirmataDriver();
         }
     };
 
