@@ -10,11 +10,11 @@ public class CommandRunner {
 
     private final String klass;
     private final String password;
-    private final String peerId;
+    private final String to;
 
-    public CommandRunner(String klass, String peerId, String password) {
+    public CommandRunner(String klass, String to, String password) {
         this.klass = klass;
-        this.peerId = peerId;
+        this.to = to;
         this.password = password;
     }
 
