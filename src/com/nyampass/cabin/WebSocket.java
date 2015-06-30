@@ -204,6 +204,7 @@ public class WebSocket {
         }
 
         Request result(Object value) {
+            this.type = Type.Result;
             this.value = value;
             return this;
         }
