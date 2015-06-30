@@ -32,13 +32,14 @@ public class CommandRunner {
 
         socket.sendCommand(id, from, to, command.password, command.klass, command.command, command.args);
 
-        WebSocket.Response response = null;
+        WebSocket.Response response;
         try {
             response = socket.getNextResponse();
             if (id.equals(response.id)) {
                 return response.value;
             } else {
-                throw new IllegalStateException();
+                // throw new IllegalStateException();
+                return false;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

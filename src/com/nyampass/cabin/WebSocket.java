@@ -85,7 +85,7 @@ public class WebSocket {
     }
 
     public void send(String message) {
-        appendMessage(message);
+        appendMessage("SEND: " + message);
         this.session.getAsyncRemote().sendText(message);
     }
 
