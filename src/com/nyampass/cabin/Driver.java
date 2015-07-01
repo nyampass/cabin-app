@@ -11,6 +11,12 @@ import java.util.Map;
  * Created by sohta on 2015/06/29.
  */
 public class Driver {
+    public interface DriverImpl {
+        static DriverImpl instance() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
     private static final Map<String, Class> classes = new HashMap<>();
 
     private static void registerClass(String name, Class klass) {
@@ -18,11 +24,11 @@ public class Driver {
     }
 
     public static Object dispatch(String klass, String command, List<Object> args) {
-        Class c = classes.get(klass);
+        Class<DriverImpl> c = classes.get(klass);
         try {
-            Object instance = c.newInstance();
+            Object instance = c.getMethod("instance", null).invoke(null, null);
             Method method = c.getMethod(command,
-                    (Class<?>[]) args.stream().map(Driver::primitiveClass).toArray((int size) -> new Class[size]));
+                    (Class<?>[]) args.stream().map(Driver::primitiveClass).toArray(Class[]::new));
             return method.invoke(instance, args.toArray());
         } catch (Exception e) {
             throw new RuntimeException(e);

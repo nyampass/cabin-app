@@ -75,6 +75,7 @@ public class WebSocket {
             }
 
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

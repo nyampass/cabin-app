@@ -8,8 +8,25 @@ import org.firmata4j.firmata.FirmataDevice;
 import java.io.IOException;
 
 @SuppressWarnings("unused")
-public class FirmataDriver implements IFirmata {
+public class FirmataDriver implements Driver.DriverImpl, IFirmata {
     private final FirmataDevice device;
+
+    private static FirmataDriver instance;
+
+    public static Driver.DriverImpl instance() {
+        if (instance == null)
+            instance = new FirmataDriver();
+        return instance;
+    }
+
+    public void onDestroy() {
+        if (this.device != null)
+            try {
+                this.device.stop();
+            } catch (IOException e) {
+                // do nothing
+            }
+    }
 
     public FirmataDriver() {
         if (SerialPortList.getPortNames().length <= 0) {
@@ -31,6 +48,7 @@ public class FirmataDriver implements IFirmata {
         try {
             pin.setMode(Pin.Mode.OUTPUT);
             pin.setValue(value ? 1 : 0);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
