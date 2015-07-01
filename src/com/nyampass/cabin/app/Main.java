@@ -10,6 +10,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -64,7 +67,7 @@ public class Main extends Application {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                })));
+                }, new KeyCodeCombination(KeyCode.N, KeyCombination.META_DOWN))));
     }
 
     private Menu menu(String name, MenuItem... menuItems) {
@@ -74,8 +77,13 @@ public class Main extends Application {
     }
 
     private MenuItem menuItem(String name, EventHandler<ActionEvent> action) {
+        return menuItem(name, action, null);
+    }
+
+    private MenuItem menuItem(String name, EventHandler<ActionEvent> action, KeyCombination shortcutKey) {
         MenuItem menuItem = new MenuItem(name);
         menuItem.setOnAction(action);
+        menuItem.setAccelerator(shortcutKey);
         return menuItem;
     }
 
