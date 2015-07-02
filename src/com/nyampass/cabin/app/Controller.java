@@ -62,9 +62,11 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
 
         this.promotedCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
+                textArea.setDisable(true);
                 this.socket.sendPromote(peerId, passwordField.getText());
             } else {
                 this.socket.sendDemote(peerId);
+                textArea.setDisable(false);
             }
         });
 
