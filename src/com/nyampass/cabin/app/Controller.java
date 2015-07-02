@@ -51,21 +51,26 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     private GraphicsContext graphicsContext;
     private WebSocket socket;
 
+    private boolean scriptDisabled;
+
     public Controller() {
     }
 
     public void initialize(URL location, ResourceBundle resources) {
         this.graphicsContext = this.canvas.getGraphicsContext2D();
         this.socket = new WebSocket(this);
+        this.scriptDisabled = false;
 
         setKeyEventTextArea(this.textArea);
 
         this.promotedCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
+                scriptDisabled = true;
                 textArea.setDisable(true);
                 this.socket.sendPromote(peerId, passwordField.getText());
                 clearLog();
             } else {
+                scriptDisabled = false;
                 this.socket.sendDemote(peerId);
                 textArea.setDisable(false);
             }
@@ -81,6 +86,10 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     }
 
     private void evalScheme() {
+        if (scriptDisabled) {
+            return;
+        }
+
         if (evalThread != null) {
             setStartButtonImage(false);
 
