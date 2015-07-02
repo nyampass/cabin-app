@@ -22,7 +22,7 @@
       <children>
         <Button id="button" fx:id="startButton" alignment="CENTER" cancelButton="false" contentDisplay="RIGHT" defaultButton="false" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" mouseTransparent="false" onAction="#onStart" prefHeight="40.0" prefWidth="40.0" style="" styleClass="push-button" text="" textAlignment="LEFT" textOverrun="CLIP" HBox.hgrow="ALWAYS">
           <graphic>
-            <ImageView fitHeight="30.0" fitWidth="30.0" mouseTransparent="false" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="startButtonImageView" fitHeight="30.0" fitWidth="30.0" mouseTransparent="false" pickOnBounds="true" preserveRatio="true">
               <image>
                 <Image url="@images/flag.png" />
               </image>

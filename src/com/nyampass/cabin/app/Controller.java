@@ -13,6 +13,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import kawa.standard.Scheme;
 
@@ -29,6 +31,8 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable, WebSocket.WebSocketHandler {
     @FXML
     Button startButton;
+    @FXML
+    ImageView startButtonImageView;
     @FXML
     TextArea textArea;
     @FXML
@@ -67,7 +71,24 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
 
     }
 
+    private Thread evalThread = null;
+
+    private void setStartButtonImage(boolean canStart) {
+        startButtonImageView.setImage(new Image(canStart? "images/flag.png": "images/stop.png"));
+    }
+
     private void evalScheme() {
+        if (evalThread != null) {
+            setStartButtonImage(false);
+
+            evalThread.interrupt();
+            evalThread = null;
+
+            return;
+        }
+
+        setStartButtonImage(false);
+
         Scheme scheme = Scheme.getInstance();
         Environment env = Scheme.builtin();
 
@@ -75,7 +96,7 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
         Environment.setGlobal(env);
         ModuleBody.setMainPrintValues(true);
 
-        new Thread(() -> {
+        this.evalThread = new Thread(() -> {
             try {
                 Environ environ = Environ.instance();
                 environ.peerId = peerId;
@@ -85,10 +106,14 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
                 appendLog(scheme.eval(textArea.getText()).toString());
 
             } catch (Throwable e) {
+                setStartButtonImage(true);
+                this.evalThread = null;
+
                 e.printStackTrace();
                 appendLog(e);
             }
-        }).start();
+        });
+        this.evalThread.start();
     }
 
     @SuppressWarnings("UnusedParameters")
