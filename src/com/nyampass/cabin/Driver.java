@@ -2,10 +2,12 @@ package com.nyampass.cabin;
 
 import com.nyampass.cabin.command.FirmataDriver;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by sohta on 2015/06/29.
@@ -24,13 +26,26 @@ public class Driver {
         classes.put(name, forceInit(klass));
     }
 
+    synchronized public static DriverImpl activate(String klass) {
+        Class<DriverImpl> c = classes.get(klass);
+        DriverImpl instance = null;
+        try {
+            instance = (DriverImpl)c.getMethod("instance", null).invoke(null, null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Environ.instance().activeDrivers.add(instance);
+
+        return instance;
+    }
+
     public static Object dispatch(String klass, String command, List<Object> args) {
         Class<DriverImpl> c = classes.get(klass);
         try {
-            Object instance = c.getMethod("instance", null).invoke(null, null);
+            DriverImpl driver = activate(klass);
             Method method = c.getMethod(command,
                     (Class<?>[]) args.stream().map(Driver::primitiveClass).toArray(Class[]::new));
-            return method.invoke(instance, args.toArray());
+            return method.invoke(driver, args.toArray());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

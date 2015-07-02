@@ -1,5 +1,6 @@
 package com.nyampass.cabin.lang;
 
+import com.nyampass.cabin.Driver;
 import com.nyampass.cabin.Environ;
 import com.nyampass.cabin.command.CommandRunner;
 import com.nyampass.cabin.command.FirmataDriver;
@@ -43,7 +44,7 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
         public Object applyN(Object[] objects) throws Throwable {
             if (objects.length == 2)
                 return new Firmata((String)objects[0], (String)objects[1]);
-            return new FirmataDriver();
+            return Driver.activate("Firmata");
         }
     };
 

@@ -1,6 +1,7 @@
 package com.nyampass.cabin.command;
 
 import com.nyampass.cabin.Driver;
+import com.nyampass.cabin.Environ;
 import jssc.SerialPortList;
 import org.firmata4j.Pin;
 import org.firmata4j.firmata.FirmataDevice;
@@ -26,6 +27,7 @@ public class FirmataDriver implements Driver.DriverImpl, IFirmata {
             } catch (IOException e) {
                 // do nothing
             }
+        instance = null;
     }
 
     public FirmataDriver() {
