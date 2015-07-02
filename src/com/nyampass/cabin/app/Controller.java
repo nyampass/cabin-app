@@ -81,7 +81,7 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
         if (evalThread != null) {
             setStartButtonImage(false);
 
-            evalThread.interrupt();
+            evalThread.stop();
             evalThread = null;
 
             return;
