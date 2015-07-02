@@ -109,8 +109,7 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
                 setStartButtonImage(true);
                 this.evalThread = null;
 
-                e.printStackTrace();
-                appendLog(e);
+                Driver.destroy();
             }
         });
         this.evalThread.start();

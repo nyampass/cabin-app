@@ -15,6 +15,7 @@ public class Driver {
         static DriverImpl instance() {
             throw new UnsupportedOperationException();
         }
+        public void onDestroy();
     }
 
     private static final Map<String, Class> classes = new HashMap<>();
@@ -32,6 +33,14 @@ public class Driver {
             return method.invoke(instance, args.toArray());
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void destroy() {
+        Set<DriverImpl> activeDrivers = Environ.instance().activeDrivers;
+        for (DriverImpl driver : activeDrivers) {
+            driver.onDestroy();
+            activeDrivers.remove(driver);
         }
     }
 
