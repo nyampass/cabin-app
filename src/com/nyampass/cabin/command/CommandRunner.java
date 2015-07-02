@@ -35,14 +35,16 @@ public class CommandRunner {
         WebSocket.Response response;
         try {
             response = socket.getNextResponse();
-            if (id.equals(response.id)) {
-                return response.value;
-            } else {
-                // throw new IllegalStateException();
-                return false;
-            }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+
+        if (response.type == WebSocket.Response.Type.Error) {
+            throw new RuntimeException(response.cause);
+        } else if (id.equals(response.id)) {
+            return response.value;
+        } else { // if response id doesn't match the corresponding request id
+            throw new IllegalStateException();
         }
     }
 

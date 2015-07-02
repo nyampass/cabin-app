@@ -111,6 +111,9 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
                 setStartButtonImage(true);
                 this.evalThread = null;
 
+                if (!(e instanceof ThreadDeath))
+                    appendLog(e);
+
                 Driver.destroy();
             }
         });

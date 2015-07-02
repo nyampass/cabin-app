@@ -72,6 +72,9 @@ public class WebSocket {
                 case Result:
                     queue.add(response);
                     break;
+                case Error:
+                    queue.add(response);
+                    break;
             }
 
         } catch (IOException e) {
@@ -130,8 +133,8 @@ public class WebSocket {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Response {
-        enum Type {
-            Promote, Demote, Connected, Command, Result;
+        public enum Type {
+            Promote, Demote, Connected, Command, Result, Error;
 
             @JsonCreator
             public static Type fromString(String value) {
@@ -153,6 +156,8 @@ public class WebSocket {
         public String status;
 
         public Object value;
+
+        public String cause;
 
         @JsonProperty(value = "peer-id")
         public String peerId;
