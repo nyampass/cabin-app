@@ -64,6 +64,7 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
             if (newValue) {
                 textArea.setDisable(true);
                 this.socket.sendPromote(peerId, passwordField.getText());
+                clearLog();
             } else {
                 this.socket.sendDemote(peerId);
                 textArea.setDisable(false);
@@ -89,6 +90,7 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
             return;
         }
 
+        clearLog();
         setStartButtonImage(false);
 
         Scheme scheme = Scheme.getInstance();
@@ -127,6 +129,10 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     }
 
     private static final DateFormat DATE_FORMATTER = new SimpleDateFormat("HH:mm:ss");
+
+    public void clearLog() {
+        consoleArea.clear();
+    }
 
     public void appendLog(String... texts) {
         String date = DATE_FORMATTER.format(new Date());
