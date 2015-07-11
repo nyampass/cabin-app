@@ -128,6 +128,7 @@ public class Main extends Application {
                         menuItem("新規ファイル", event -> {
                             try {
                                 setupStage(new Stage(), astage -> controller -> {
+                                    seControllerSource(controller, defaultSample);
                                     setStageRandomPosition(astage);
                                 }).show();
 
