@@ -3,9 +3,7 @@ package com.nyampass.cabin.app;
 import com.nyampass.cabin.Driver;
 import com.nyampass.cabin.Environ;
 import com.nyampass.cabin.WebSocket;
-import gnu.expr.Language;
-import gnu.expr.ModuleBody;
-import gnu.mapping.Environment;
+import com.nyampass.cabin.lang.SchemeBridge;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import kawa.standard.Scheme;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -82,7 +79,7 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     private Thread evalThread = null;
 
     private void setStartButtonImage(boolean canStart) {
-        startButtonImageView.setImage(new Image(canStart? "images/flag.png": "images/stop.png"));
+        startButtonImageView.setImage(new Image(canStart ? "images/flag.png" : "images/stop.png"));
     }
 
     private void evalScheme() {
@@ -102,12 +99,7 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
         clearLog();
         setStartButtonImage(false);
 
-        Scheme scheme = Scheme.getInstance();
-        Environment env = Scheme.builtin();
-
-        Language.setDefaults(scheme);
-        Environment.setGlobal(env);
-        ModuleBody.setMainPrintValues(true);
+        SchemeBridge langBridge = new SchemeBridge();
 
         this.evalThread = new Thread(() -> {
             try {
@@ -115,8 +107,10 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
                 environ.peerId = peerId;
                 environ.socket = socket;
                 environ.graphicsContext = graphicsContext;
-                scheme.loadClass("com.nyampass.cabin.lang.SchemeBridge");
-                appendLog(scheme.eval(textArea.getText()).toString());
+
+                langBridge.eval(textArea.getText()).toString();
+
+                appendLog();
 
             } catch (Throwable e) {
                 setStartButtonImage(true);
@@ -191,5 +185,9 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
             peerIdLabel.setText("" +
                     "Id: " + peerId);
         });
+    }
+
+    public void setSourceCode(String sourceCode) {
+        this.textArea.setText(sourceCode);
     }
 }

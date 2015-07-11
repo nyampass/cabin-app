@@ -28,10 +28,14 @@ public class Driver {
 
     synchronized public static DriverImpl activate(String klass) {
         Class<DriverImpl> c = classes.get(klass);
-        DriverImpl instance = null;
+        DriverImpl instance;
         try {
             instance = (DriverImpl)c.getMethod("instance", null).invoke(null, null);
-        } catch (Exception e) {
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
         Environ.instance().activeDrivers.add(instance);

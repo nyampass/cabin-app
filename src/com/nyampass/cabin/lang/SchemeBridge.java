@@ -1,52 +1,63 @@
 package com.nyampass.cabin.lang;
 
-import com.nyampass.cabin.Driver;
-import com.nyampass.cabin.Environ;
+import com.nyampass.cabin.Utils;
 import com.nyampass.cabin.command.CommandRunner;
-import com.nyampass.cabin.command.FirmataDriver;
 import com.nyampass.cabin.command.IFirmata;
+import gnu.expr.Language;
 import gnu.expr.ModuleBody;
-import gnu.expr.RunnableModule;
 import gnu.mapping.*;
-import gnu.math.DFloNum;
+import kawa.standard.Scheme;
+import org.omg.SendingContext.RunTime;
+
+import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
-public class SchemeBridge extends ModuleBody implements RunnableModule {
-    private CallContext context;
+public class SchemeBridge {
+    private Scheme scheme;
+    private static Pattern hyphenJavaMethodPattern = Pattern.compile("\\((\\w+):([\\w-]+)( .+)?\\)");
+    private static Pattern underScoreMethodPattern = Pattern.compile("-(.)");
 
-    @Override
-    public void run(CallContext ctx) throws Throwable {
-        this.context = ctx;
-        super.run(ctx);
+    static {
+        ModuleBody.setMainPrintValues(true);
     }
 
-    public static final Procedure0 canvas = new Procedure0("canvas") {
-        @Override
-        public Object apply0() throws Throwable {
-            return Environ.instance().graphicsContext;
-        }
-    };
+    public SchemeBridge() {
+        this.scheme = Scheme.getInstance();
 
-    public static final Procedure1 delay = new Procedure1("delay") {
-        @Override
-        public Object apply1(Object second) throws Throwable {
-            try {
-                Thread.sleep(((DFloNum) second).longValue() * 1000);
-                return true;
-            } catch (InterruptedException e) {
-                return false;
-            }
-        }
-    };
+        Environment env = Scheme.builtin();
+        Language.setDefaults(this.scheme);
+        Environment.setGlobal(env);
+    }
 
-    public static final ProcedureN firmata = new ProcedureN("firmata") {
-        @Override
-        public Object applyN(Object[] objects) throws Throwable {
-            if (objects.length == 2)
-                return new Firmata((String)objects[0], (String)objects[1]);
-            return Driver.activate("Firmata");
+    private String fixCode(String code) {
+        return Utils.regexTransform(hyphenJavaMethodPattern, code, methodMatch -> {
+            // canvas:get-width -> canvas:getWidth
+            return "(" + methodMatch.group(1) + ":" + camelCaseMethodName(methodMatch.group(2) + (methodMatch.group(3) != null ? methodMatch.group(3) : "") + ")");
+        });
+    }
+
+    private String camelCaseMethodName(String str) {
+        return Utils.regexTransform(underScoreMethodPattern, str, matcher -> matcher.group(1).toUpperCase());
+    }
+
+    public Object eval(String code) {
+        try {
+            this.scheme.loadClass("com.nyampass.cabin.lang.SchemeModuleBody");
+
+            code = fixCode(code);
+            System.out.println(code);
+
+            return this.scheme.eval(code);
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (Throwable throwable) {
+            if (throwable instanceof RuntimeException)
+                throw (RuntimeException)throwable;
+            throw new RuntimeException(throwable);
+
         }
-    };
+    }
 
     public static class Firmata extends CommandRunner implements IFirmata {
         public Firmata(String peerId, String password) {
@@ -54,8 +65,8 @@ public class SchemeBridge extends ModuleBody implements RunnableModule {
         }
 
         @Override
-        public void digitalWrite(int pinNo, boolean value){
-            run("digitalWrite", new Object[] {pinNo, value});
+        public void digitalWrite(int pinNo, boolean value) {
+            run("digitalWrite", new Object[]{pinNo, value});
         }
     }
 }

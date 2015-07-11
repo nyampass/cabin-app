@@ -54,7 +54,7 @@
           <tabs>
             <Tab text="新規ファイル">
               <content>
-                <TextArea fx:id="textArea" prefWidth="200.0" text="(define arduino (firmata))&#10;&#10;(let loop ()&#10;   (arduino:digitalWrite 13 #t)&#10;   (delay 1.0)&#10;&#10;   (arduino:digitalWrite 13 #f)&#10;   (delay 1.0)&#10;   (loop))" wrapText="true" />
+                <TextArea fx:id="textArea" prefWidth="200.0" text="" wrapText="true" />
               </content>
             </Tab>
           </tabs>
