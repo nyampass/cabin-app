@@ -2,7 +2,6 @@ package com.nyampass.cabin.app;
 
 import com.nyampass.cabin.Driver;
 import com.nyampass.cabin.Environ;
-import com.nyampass.cabin.WebSocket;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -22,6 +21,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -45,10 +45,28 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        loadConfig();
         setupStage(stage, aStage -> aController -> {
             seControllerSource(aController, defaultSample);
         });
         stage.show();
+    }
+
+    private void loadConfig() {
+        Properties config = new Properties();
+        try {
+            try (FileReader r = new FileReader(file(getClass().getResource("/config/cabin.properties")))) {
+                config.load(r);
+                String customName = config.getProperty("cabin.customName");
+                String customNamePassword = config.getProperty("cabin.customNamePassword");
+                if (customName != null && customNamePassword != null) {
+                    Environ environ = Environ.instance();
+                    environ.customName = customName;
+                    environ.customNamePassword = customNamePassword;
+                }
+            }
+        } catch (IOException e) {
+        }
     }
 
     private Stage setupStage(Function<Stage, Consumer<Controller>> consumer) {
@@ -179,10 +197,17 @@ public class Main extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
+        Environ environ = Environ.instance();
         TextField name = new TextField();
         name.setPromptText("サーバ名");
+        if (environ.customName != null) {
+            name.setText(environ.customName);
+        }
         PasswordField password = new PasswordField();
         password.setPromptText("パスワード");
+        if (environ.customNamePassword != null) {
+            password.setText(environ.customNamePassword);
+        }
 
         grid.add(new Label("サーバ名: "), 0, 0);
         grid.add(name, 1, 0);
@@ -216,13 +241,13 @@ public class Main extends Application {
         result.ifPresent(customNamePassword -> {
             String inputName = customNamePassword.getKey();
             String inputPassword = customNamePassword.getValue();
-            Environ environ = Environ.instance();
+            Environ env = Environ.instance();
             if (inputName != null && !inputName.equals("") && inputPassword != null && !inputPassword.equals("")) {
-                environ.customName = customNamePassword.getKey();
-                environ.customNamePassword = customNamePassword.getValue();
+                env.customName = customNamePassword.getKey();
+                env.customNamePassword = customNamePassword.getValue();
             } else {
-                environ.customName = null;
-                environ.customNamePassword = null;
+                env.customName = null;
+                env.customNamePassword = null;
             }
         });
     }
