@@ -1,6 +1,8 @@
 package com.nyampass.cabin.app;
 
 import com.nyampass.cabin.Driver;
+import com.nyampass.cabin.Environ;
+import com.nyampass.cabin.WebSocket;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -171,40 +173,40 @@ public class Main extends Application {
         ButtonType cancelButtonType = new ButtonType("キャンセル", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(settingButtonType, cancelButtonType);
 
-        // Create the username and password labels and fields.
+        // Create the customName and password labels and fields.
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
-        TextField customName = new TextField();
-        customName.setPromptText("サーバ名");
+        TextField name = new TextField();
+        name.setPromptText("サーバ名");
         PasswordField password = new PasswordField();
         password.setPromptText("パスワード");
 
         grid.add(new Label("サーバ名: "), 0, 0);
-        grid.add(customName, 1, 0);
+        grid.add(name, 1, 0);
         grid.add(new Label("パスワード: "), 0, 1);
         grid.add(password, 1, 1);
 
-        // Enable/Disable login button depending on whether a username was entered.
+        // Enable/Disable login button depending on whether a customName was entered.
         Node settingButton = dialog.getDialogPane().lookupButton(settingButtonType);
         settingButton.setDisable(true);
 
         // Do some validation (using the Java 8 lambda syntax).
-        customName.textProperty().addListener((observable, oldValue, newValue) -> {
+        name.textProperty().addListener((observable, oldValue, newValue) -> {
             settingButton.setDisable(newValue.trim().isEmpty());
         });
 
         dialog.getDialogPane().setContent(grid);
 
-        // Request focus on the username field by default.
-        Platform.runLater(() -> customName.requestFocus());
+        // Request focus on the customName field by default.
+        Platform.runLater(() -> name.requestFocus());
 
-        // Convert the result to a username-password-pair when the login button is clicked.
+        // Convert the result to a customName-password-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == settingButtonType) {
-                return new Pair<>(customName.getText(), password.getText());
+                return new Pair<>(name.getText(), password.getText());
             }
             return null;
         });
@@ -212,7 +214,16 @@ public class Main extends Application {
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
         result.ifPresent(customNamePassword -> {
-            System.out.println("Username=" + customNamePassword.getKey() + ", Password=" + customNamePassword.getValue());
+            String inputName = customNamePassword.getKey();
+            String inputPassword = customNamePassword.getValue();
+            Environ environ = Environ.instance();
+            if (inputName != null && !inputName.equals("") && inputPassword != null && !inputPassword.equals("")) {
+                environ.customName = customNamePassword.getKey();
+                environ.customNamePassword = customNamePassword.getValue();
+            } else {
+                environ.customName = null;
+                environ.customNamePassword = null;
+            }
         });
     }
 

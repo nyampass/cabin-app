@@ -14,6 +14,8 @@ public class Environ {
     public WebSocket socket;
     public GraphicsContext graphicsContext;
     public Set<Driver.DriverImpl> activeDrivers;
+    public String customName;
+    public String customNamePassword;
 
     private static int counter = 0;
 

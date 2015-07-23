@@ -95,8 +95,13 @@ public class WebSocket {
     }
 
     public void sendPromote(String from, String password) {
-        String request = new Request(Request.Type.Promote, from).password(password).toJson();
-        send(request);
+        Request request = new Request(Request.Type.Promote, from).password(password);
+        String customName = Environ.instance().customName;
+        String customNamePassword = Environ.instance().customNamePassword;
+        if (customName != null) {
+            request.customName(customName, customNamePassword);
+        }
+        send(request.toJson());
     }
 
     public void sendDemote(String from) {
@@ -188,6 +193,11 @@ public class WebSocket {
 
         public Object value;
 
+        @JsonProperty("custom-name")
+        public String customName;
+        @JsonProperty("custom-name-password")
+        public String customNamePassword;
+
         Request() {
         }
 
@@ -218,6 +228,12 @@ public class WebSocket {
 
         Request password(String password) {
             this.password = password;
+            return this;
+        }
+
+        Request customName(String customName, String customNamePassword) {
+            this.customName = customName;
+            this.customNamePassword = customNamePassword;
             return this;
         }
 
