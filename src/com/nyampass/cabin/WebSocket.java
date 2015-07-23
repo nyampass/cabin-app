@@ -22,7 +22,8 @@ public class WebSocket {
 
     private final BlockingQueue<Response> queue = new LinkedBlockingQueue<Response>();
 
-    private static final URI ENDPOINT_URI = URI.create("ws://cabin.nyampass.com/ws");
+    //private static final URI ENDPOINT_URI = URI.create("ws://cabin.nyampass.com/ws");
+    private static final URI ENDPOINT_URI = URI.create("ws://localhost:3000/ws");
 
     public WebSocket(WebSocketHandler handler) {
         this(ENDPOINT_URI, handler);
