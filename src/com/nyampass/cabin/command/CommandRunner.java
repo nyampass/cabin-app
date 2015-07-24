@@ -4,16 +4,19 @@ import com.nyampass.cabin.Environ;
 import com.nyampass.cabin.WebSocket;
 
 import java.util.*;
+import java.util.function.Consumer;
 
-public class CommandRunner {
+public class CommandRunner implements WebSocket.WebSocketHandler {
     private final String klass;
     private final String password;
     private final String to;
+    private final Map<String,Consumer<Object>> listeners;
 
     public CommandRunner(String klass, String to, String password) {
         this.klass = klass;
         this.to = to;
         this.password = password;
+        this.listeners = new HashMap<>();
     }
 
     public Object run(String name, Object[] args) {
@@ -47,6 +50,44 @@ public class CommandRunner {
             throw new IllegalStateException();
         }
     }
+
+    public void setEventListener(String name, Object[] args, Consumer<Object> listener) {
+        setEventListener(name, Arrays.asList(args), listener);
+    }
+
+    public void setEventListener(String name, List<Object> args, Consumer<Object> listener) {
+        setEventListener(command(name, args), listener);
+    }
+
+    public void setEventListener(Command command, Consumer<Object> listener) {
+        Environ environ = Environ.instance();
+        String from = environ.peerId;
+        WebSocket socket = environ.socket;
+        String id = UUID.randomUUID().toString();
+
+        socket.addHandler(this);
+        listeners.put(id, listener);
+
+        socket.sendCommand(id, from, to, command.password, command.klass, command.command, command.args);
+    }
+
+    @Override
+    public void handleEvent(WebSocket.Response event) {
+        String id = event.id;
+        if (listeners.containsKey(id)) {
+            Consumer<Object> listener = listeners.get(id);
+            listener.accept(event.value);
+        }
+    }
+
+    @Override
+    public void handleCommand(WebSocket.Request command) {}
+
+    @Override
+    public void appendLog(String log) {}
+
+    @Override
+    public void onSetPeerId(String peerId) {}
 
     private Command command(String name, List<Object> args) {
         return new Command(this.klass, name, this.to, this.password, args);
