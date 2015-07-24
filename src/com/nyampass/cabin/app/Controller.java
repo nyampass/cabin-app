@@ -55,9 +55,10 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
 
     public void initialize(URL location, ResourceBundle resources) {
         this.graphicsContext = this.canvas.getGraphicsContext2D();
-        this.socket = new WebSocket(this);
+        this.socket = new WebSocket();
         this.scriptDisabled = false;
 
+        socket.addHandler(this);
         setKeyEventTextArea(this.textArea);
 
         this.promotedCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {

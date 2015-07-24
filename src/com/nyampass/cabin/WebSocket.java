@@ -8,6 +8,7 @@ import com.sun.xml.internal.ws.util.StringUtils;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
@@ -18,19 +19,18 @@ import java.util.concurrent.TimeUnit;
 @ClientEndpoint
 public class WebSocket {
     Session session = null;
-    private final WebSocketHandler handler;
+    private final List<WebSocketHandler> handlers = new ArrayList<>();
 
     private final BlockingQueue<Response> queue = new LinkedBlockingQueue<Response>();
 
     //private static final URI ENDPOINT_URI = URI.create("ws://cabin.nyampass.com/ws");
     private static final URI ENDPOINT_URI = URI.create("ws://localhost:3000/ws");
 
-    public WebSocket(WebSocketHandler handler) {
-        this(ENDPOINT_URI, handler);
+    public WebSocket() {
+        this(ENDPOINT_URI);
     }
 
-    public WebSocket(URI endpointURI, WebSocketHandler handler) {
-        this.handler = handler;
+    public WebSocket(URI endpointURI) {
         try {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             container.connectToServer(this, endpointURI);
@@ -39,28 +39,34 @@ public class WebSocket {
         }
     }
 
+    public void addHandler(WebSocketHandler handler) {
+        handlers.add(handler);
+    }
+
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
-        appendMessage("CONNECTED");
+        appendLog("CONNECTED");
     }
 
     @OnClose
     public void onClose(Session session, CloseReason reason) {
         this.session = null;
-        appendMessage("DISCONNECTED");
+        appendLog("DISCONNECTED");
     }
 
     @OnMessage
     public void onMessage(String message) {
-        this.handler.appendLog("RESPONSE: " + message);
+        appendLog("RESPONSE: " + message);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
             Response response = mapper.readValue(message, Response.class);
             switch (response.type) {
                 case Connected:
-                    this.handler.onSetPeerId(response.peerId);
+                    for (WebSocketHandler handler : handlers) {
+                        handler.onSetPeerId(response.peerId);
+                    }
                     break;
                 case Promote:
                 case Demote:
@@ -68,7 +74,9 @@ public class WebSocket {
                     break;
                 case Command:
                     Request request = mapper.readValue(message, Request.class);
-                    handler.handleCommand(request);
+                    for (WebSocketHandler handler : handlers) {
+                        handler.handleCommand(request);
+                    }
                     break;
                 case Result:
                     queue.add(response);
@@ -86,11 +94,11 @@ public class WebSocket {
 
     @OnError
     public void onError(Session session, Throwable t) {
-        this.handler.appendLog("ERROR: " + t.getLocalizedMessage());
+        appendLog("ERROR: " + t.getLocalizedMessage());
     }
 
     public void send(String message) {
-        appendMessage("SEND: " + message);
+        appendLog("SEND: " + message);
         this.session.getAsyncRemote().sendText(message);
     }
 
@@ -265,7 +273,9 @@ public class WebSocket {
         void onSetPeerId(String peerId);
     }
 
-    private void appendMessage(String log) {
-        this.handler.appendLog(log);
+    private void appendLog(String log) {
+        for (WebSocketHandler handler : handlers) {
+            handler.appendLog(log);
+        }
     }
 }
