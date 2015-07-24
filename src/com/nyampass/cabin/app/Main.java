@@ -22,6 +22,7 @@ import javafx.util.Pair;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -93,6 +94,22 @@ public class Main extends Application {
                 environ.customName = customName;
                 environ.customNamePassword = customNamePassword;
             }
+        }
+    }
+
+    private void saveCustomName(String customName, String customNamePassword) {
+        Properties config = loadConfig();
+        if (config == null) {
+            config = new Properties();
+        }
+        config.setProperty("cabin.custom_name", customName);
+        config.setProperty("cabin.custom_name_password", customNamePassword);
+
+        try {
+            try (FileWriter w = new FileWriter(configFile())) {
+                config.store(w, null);
+            }
+        } catch (IOException e) {
         }
     }
 
@@ -272,6 +289,7 @@ public class Main extends Application {
             if (inputName != null && !inputName.equals("") && inputPassword != null && !inputPassword.equals("")) {
                 env.customName = customNamePassword.getKey();
                 env.customNamePassword = customNamePassword.getValue();
+                saveCustomName(env.customName, env.customNamePassword);
             } else {
                 env.customName = null;
                 env.customNamePassword = null;
