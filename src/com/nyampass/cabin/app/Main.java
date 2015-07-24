@@ -45,27 +45,54 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        loadConfig();
+        loadCustomName();
         setupStage(stage, aStage -> aController -> {
             seControllerSource(aController, defaultSample);
         });
         stage.show();
     }
 
-    private void loadConfig() {
+    private File configFile() {
+        String separator = System.getProperty("file.separator");
+        String cabinDirName = System.getProperty("user.home") + separator + ".cabin";
+        File cabinDir = new File(cabinDirName);
+        if (!cabinDir.exists()) {
+            cabinDir.mkdir();
+        }
+
+        File configFile = new File(cabinDirName, "cabin.properties");
+        if (!configFile.exists()) {
+            try {
+                configFile.createNewFile();
+            } catch (IOException e) {
+                configFile = null;
+            }
+        }
+        return configFile;
+    }
+
+    private Properties loadConfig() {
         Properties config = new Properties();
         try {
-            try (FileReader r = new FileReader(file(getClass().getResource("/config/cabin.properties")))) {
+            try (FileReader r = new FileReader(configFile())) {
                 config.load(r);
-                String customName = config.getProperty("cabin.customName");
-                String customNamePassword = config.getProperty("cabin.customNamePassword");
-                if (customName != null && customNamePassword != null) {
-                    Environ environ = Environ.instance();
-                    environ.customName = customName;
-                    environ.customNamePassword = customNamePassword;
-                }
             }
         } catch (IOException e) {
+            config = null;
+        }
+        return config;
+    }
+
+    private void loadCustomName() {
+        Properties config = loadConfig();
+        if (config != null) {
+            String customName = config.getProperty("cabin.custom_name");
+            String customNamePassword = config.getProperty("cabin.custom_name_password");
+            if (customName != null && customNamePassword != null) {
+                Environ environ = Environ.instance();
+                environ.customName = customName;
+                environ.customNamePassword = customNamePassword;
+            }
         }
     }
 
