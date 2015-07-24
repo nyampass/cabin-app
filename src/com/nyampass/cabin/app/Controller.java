@@ -175,6 +175,10 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
     }
 
     @Override
+    public void handleEvent(WebSocket.Response event) {
+    }
+
+    @Override
     public void appendLog(String log) {
         this.appendLog(new String[]{log});
     }

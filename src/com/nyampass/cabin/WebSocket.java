@@ -81,6 +81,11 @@ public class WebSocket {
                 case Result:
                     queue.add(response);
                     break;
+                case Event:
+                    for (WebSocketHandler handler : handlers) {
+                        handler.handleEvent(response);
+                    }
+                    break;
                 case Error:
                     queue.add(response);
                     break;
@@ -144,22 +149,23 @@ public class WebSocket {
         send(request);
     }
 
+    public void sendEvent(String id, String from, String to, Object ret) {
+        String request = new Request(id)
+                .from(from)
+                .to(to)
+                .event(ret)
+                .toJson();
+        send(request);
+    }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Response {
         public enum Type {
-            Promote, Demote, Connected, Command, Result, Error;
+            Promote, Demote, Connected, Command, Result, Event, Error;
 
             @JsonCreator
             public static Type fromString(String value) {
-                return valueOf(StringUtils.capitalize(value));
-            }
-        }
-
-        enum ResultType {
-            Int, String, Bool;
-            @JsonCreator
-            public static ResultType fromString(String value) {
                 return valueOf(StringUtils.capitalize(value));
             }
         }
@@ -181,7 +187,7 @@ public class WebSocket {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Request {
         enum Type {
-            Promote, Demote, Command, Result;
+            Promote, Demote, Command, Event, Result;
 
             @SuppressWarnings("unused")
             @JsonValue
@@ -234,6 +240,12 @@ public class WebSocket {
             return this;
         }
 
+        Request event(Object value) {
+            this.type = Type.Event;
+            this.value = value;
+            return this;
+        }
+
         Request password(String password) {
             this.password = password;
             return this;
@@ -267,6 +279,7 @@ public class WebSocket {
 
     public interface WebSocketHandler {
         void handleCommand(Request command);
+        void handleEvent(Response event);
 
         void appendLog(String log);
 
