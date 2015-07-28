@@ -2,11 +2,17 @@ package com.nyampass.cabin.command;
 
 import com.nyampass.cabin.Driver;
 import com.nyampass.cabin.Environ;
+import gnu.mapping.Procedure;
 import jssc.SerialPortList;
+import org.firmata4j.IOEvent;
 import org.firmata4j.Pin;
+import org.firmata4j.PinEventListener;
 import org.firmata4j.firmata.FirmataDevice;
 
+import javax.jws.WebParam;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public class FirmataDriver implements Driver.DriverImpl, IFirmata {
@@ -54,5 +60,27 @@ public class FirmataDriver implements Driver.DriverImpl, IFirmata {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void on(String eventName, Object eventListener) {
+        try {
+            this.device.getPin(12).setMode(Pin.Mode.INPUT);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        this.device.getPin(12).addEventListener(new PinEventListener() {
+            @Override
+            public void onModeChange(IOEvent ioEvent) {}
+
+            @Override
+            public void onValueChange(IOEvent ioEvent) {
+                try {
+                    ((Procedure)eventListener).apply1((int)ioEvent.getValue());
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 }
