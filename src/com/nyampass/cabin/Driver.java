@@ -43,15 +43,39 @@ public class Driver {
         return instance;
     }
 
-    public static Object dispatch(String klass, String command, List<Object> args) {
+    static class Pair<T1,T2> {
+        T1 first;
+        T2 second;
+
+        Pair(T1 first, T2 second) {
+            this.first = first;
+            this.second = second;
+        }
+    }
+
+    private static Pair<DriverImpl,Method> findMatchingMethod(String klass, String command, List<Object> args) {
         Class<DriverImpl> c = classes.get(klass);
+        Pair<DriverImpl,Method> ret;
         try {
             DriverImpl driver = activate(klass);
-            Method method = c.getMethod(command,
-                    (Class<?>[]) args.stream().map(Driver::primitiveClass).toArray(Class[]::new));
-            return method.invoke(driver, args.toArray());
+            Method method = c.getMethod(command, (Class<?>[]) args.stream().map(Driver::primitiveClass).toArray(Class[]::new));
+            ret = new Pair<>(driver, method);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            ret = null;
+        }
+        return ret;
+    }
+
+    public static Object dispatch(String klass, String command, List<Object> args) {
+        Pair<DriverImpl,Method> pair = findMatchingMethod(klass, command, args);
+        if (pair != null) {
+            try {
+                return pair.second.invoke(pair.first, args.toArray());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            throw new RuntimeException("no matching method found: " + klass + "#" + command);
         }
     }
 
