@@ -13,6 +13,7 @@ import javax.jws.WebParam;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 public class FirmataDriver implements Driver.DriverImpl, IFirmata {
@@ -64,6 +65,16 @@ public class FirmataDriver implements Driver.DriverImpl, IFirmata {
 
     @Override
     public void on(String eventName, Object eventListener) {
+        onEvent(eventName, v -> {
+            try {
+                ((Procedure)eventListener).apply1(v);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
+    }
+
+    public void onEvent(String eventName, Consumer<Integer> eventListener) {
         try {
             this.device.getPin(12).setMode(Pin.Mode.INPUT);
         } catch (IOException e) {
@@ -76,7 +87,7 @@ public class FirmataDriver implements Driver.DriverImpl, IFirmata {
             @Override
             public void onValueChange(IOEvent ioEvent) {
                 try {
-                    ((Procedure)eventListener).apply1((int)ioEvent.getValue());
+                    eventListener.accept((int)ioEvent.getValue());
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }

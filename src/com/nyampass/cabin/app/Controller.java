@@ -167,11 +167,20 @@ public class Controller implements Initializable, WebSocket.WebSocketHandler {
         textArea.setOnKeyReleased(event -> pressed.remove(event.getCode()));
     }
 
+    private boolean isEventListeningRequest(WebSocket.Request command) {
+        return command.command.startsWith("on");
+    }
+
     @Override
     public void handleCommand(WebSocket.Request command) {
-        Object ret = Driver.dispatch(command.klass, command.command, command.args);
-
-        this.socket.sendResult(command.id, command.to, command.from, ret);
+        if (isEventListeningRequest(command)) {
+            Driver.addEventListener(command.klass, command.command, command.args, value -> {
+                this.socket.sendEvent(command.id, command.to, command.from, value);
+            });
+        } else {
+            Object ret = Driver.dispatch(command.klass, command.command, command.args);
+            this.socket.sendResult(command.id, command.to, command.from, ret);
+        }
     }
 
     @Override

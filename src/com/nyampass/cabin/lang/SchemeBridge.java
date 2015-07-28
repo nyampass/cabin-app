@@ -69,8 +69,15 @@ public class SchemeBridge {
             run("digitalWrite", new Object[]{pinNo, value});
         }
 
-        public void on(String eventName, int pinNo, Object eventListener) {
-            setEventListener("pinValueChange", new Object[]{pinNo}, (x -> { return; }));
+        @Override
+        public void on(String eventName, Object eventListener) {
+            setEventListener("onEvent", new Object[]{}, v -> {
+                try {
+                    ((Procedure)eventListener).apply1((int)v);
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 }

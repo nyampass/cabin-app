@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Created by sohta on 2015/06/29.
@@ -71,6 +72,20 @@ public class Driver {
         if (pair != null) {
             try {
                 return pair.second.invoke(pair.first, args.toArray());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            throw new RuntimeException("no matching method found: " + klass + "#" + command);
+        }
+    }
+
+    public static void addEventListener(String klass, String command, List<Object> args, Consumer<Object> eventListener) {
+        Pair<DriverImpl,Method> pair = findMatchingMethod(klass, command, args);
+        if (pair != null) {
+            try {
+                args.add(eventListener);
+                pair.second.invoke(pair.first, args.toArray());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
