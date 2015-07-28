@@ -8,6 +8,7 @@ import com.nyampass.cabin.command.IFirmata;
 import gnu.expr.Language;
 import gnu.expr.ModuleBody;
 import gnu.expr.RunnableModule;
+import gnu.lists.EmptyList;
 import gnu.mapping.*;
 import gnu.math.DFloNum;
 import gnu.math.IntNum;
@@ -70,6 +71,14 @@ public class SchemeModuleBody extends ModuleBody implements RunnableModule {
             if (objects.length == 2)
                 return new SchemeBridge.Firmata((String) objects[0], (String) objects[1]);
             return Driver.activate("Firmata");
+        }
+    };
+
+    public static final Procedure1 display = new Procedure1("display") {
+        @Override
+        public Object apply1(Object o) throws Throwable {
+            System.out.println(o.toString());
+            return EmptyList.emptyList;
         }
     };
 }
