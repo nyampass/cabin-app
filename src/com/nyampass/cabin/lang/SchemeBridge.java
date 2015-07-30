@@ -70,8 +70,8 @@ public class SchemeBridge {
         }
 
         @Override
-        public void on(String eventName, Object eventListener) {
-            setEventListener("onEvent", new Object[]{}, v -> {
+        public void onValueChange(int pinNo, Object eventListener) {
+            setEventListener("onValueChangeEvent", new Object[]{pinNo}, v -> {
                 try {
                     ((Procedure)eventListener).apply1((int)v);
                 } catch (Throwable e) {

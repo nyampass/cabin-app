@@ -64,8 +64,8 @@ public class FirmataDriver implements Driver.DriverImpl, IFirmata {
     }
 
     @Override
-    public void on(String eventName, Object eventListener) {
-        onEvent(eventName, v -> {
+    public void onValueChange(int pinNo, Object eventListener) {
+        onValueChangeEvent(pinNo, v -> {
             try {
                 ((Procedure)eventListener).apply1(v);
             } catch (Throwable throwable) {
@@ -74,13 +74,13 @@ public class FirmataDriver implements Driver.DriverImpl, IFirmata {
         });
     }
 
-    public void onEvent(String eventName, Consumer<Integer> eventListener) {
+    public void onValueChangeEvent(int pinNo, Consumer<Integer> eventListener) {
         try {
-            this.device.getPin(12).setMode(Pin.Mode.INPUT);
+            this.device.getPin(pinNo).setMode(Pin.Mode.INPUT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.device.getPin(12).addEventListener(new PinEventListener() {
+        this.device.getPin(pinNo).addEventListener(new PinEventListener() {
             @Override
             public void onModeChange(IOEvent ioEvent) {}
 
