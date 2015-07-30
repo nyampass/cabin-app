@@ -114,8 +114,12 @@ public class Driver {
         wrapper2primitives.put(Double.class, double.class);
     }
 
-    private static Class<?> primitiveClass(Object object) {
-        return wrapper2primitives.get(object.getClass());
+    private static Class<?> primitiveClass(Class<?> klass) {
+        if (wrapper2primitives.containsKey(klass)) {
+            return wrapper2primitives.get(klass);
+        } else {
+            return klass;
+        }
     }
 
     public static void load() {
