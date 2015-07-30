@@ -4,11 +4,9 @@ import com.nyampass.cabin.command.FirmataDriver;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Created by sohta on 2015/06/29.
@@ -54,12 +52,12 @@ public class Driver {
         }
     }
 
-    private static Pair<DriverImpl,Method> findMatchingMethod(String klass, String command, List<Object> args) {
+    private static Pair<DriverImpl,Method> findMatchingMethod(String klass, String command, List<Class<?>> argClasses) {
         Class<DriverImpl> c = classes.get(klass);
         Pair<DriverImpl,Method> ret;
         try {
             DriverImpl driver = activate(klass);
-            Method method = c.getMethod(command, (Class<?>[]) args.stream().map(Driver::primitiveClass).toArray(Class[]::new));
+            Method method = c.getMethod(command, argClasses.stream().map(Driver::primitiveClass).toArray(Class[]::new));
             ret = new Pair<>(driver, method);
         } catch (Exception e) {
             ret = null;
@@ -68,7 +66,7 @@ public class Driver {
     }
 
     public static Object dispatch(String klass, String command, List<Object> args) {
-        Pair<DriverImpl,Method> pair = findMatchingMethod(klass, command, args);
+        Pair<DriverImpl,Method> pair = findMatchingMethod(klass, command, args.stream().map(Object::getClass).collect(Collectors.toList()));
         if (pair != null) {
             try {
                 return pair.second.invoke(pair.first, args.toArray());
@@ -81,7 +79,9 @@ public class Driver {
     }
 
     public static void addEventListener(String klass, String command, List<Object> args, Consumer<Object> eventListener) {
-        Pair<DriverImpl,Method> pair = findMatchingMethod(klass, command, args);
+        List<Class<?>> argClasses = args.stream().map(Object::getClass).collect(Collectors.toList());
+        argClasses.add(Consumer.class);
+        Pair<DriverImpl,Method> pair = findMatchingMethod(klass, command, argClasses);
         if (pair != null) {
             try {
                 args.add(eventListener);
