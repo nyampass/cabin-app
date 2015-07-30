@@ -1,4 +1,6 @@
-(define arduino (firmata))
+(define arduino (firmata "hoge" ""))
+
+(arduino:onValueChange 12 display)
 
 (let loop ()
   (arduino:digital-write 13 #t)
